@@ -205,7 +205,7 @@ You<span class="w"> </span>use<span class="w"> </span>Potion<span class="w"> </s
     <span class="k">def</span><span class="w"> </span><span class="nf">get_sides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combatant</span><span class="p">):</span>
 <span class="w">           </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">           Get a listing of the two &#39;sides&#39; of this combat,</span>
-<span class="sd">           m the perspective of the provided combatant.</span>
+<span class="sd">           from the perspective of the provided combatant.</span>
 <span class="sd">           &quot;&quot;&quot;</span>
            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">allow_pvp</span><span class="p">:</span>
                <span class="c1"># in pvp, everyone else is an ememy</span>
@@ -257,7 +257,7 @@ You<span class="w"> </span>use<span class="w"> </span>Potion<span class="w"> </s
 <p>We use the <code class="docutils literal notranslate"><span class="pre">advantage/disadvantage_matrix</span></code> Attributes to track who has advantage against whom.</p>
 <aside class="sidebar">
 <p class="sidebar-title">.pop()</p>
-<p>The Python <code class="docutils literal notranslate"><span class="pre">.pop()</span></code> method exists on lists and dicts as well as some other iterables. It ‘pops’ and returns an element from the container. For a list, it’s either popped by index or by popping the last element. For a dict (like here), a specific key must be given to pop. If you don’t provide a default value as a second element, an error will be raised if the key you try to pop is not found.</p>
+<p>The Python <code class="docutils literal notranslate"><span class="pre">.pop()</span></code> method removes an element from a list or dict and returns it. For a list, it removes by index (or the last element by default). For a dict (like here), you specify which key to remove. Providing a default value as a second argument prevents an error if the key doesn’t exist.</p>
 </aside>
 <p>In the <code class="docutils literal notranslate"><span class="pre">has</span> <span class="pre">dis/advantage</span></code> methods we <code class="docutils literal notranslate"><span class="pre">pop</span></code> the target from the matrix which will result either in the value <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default value we give to <code class="docutils literal notranslate"><span class="pre">pop</span></code> if the target is not in the matrix). This means that the advantage, once gained, can only be used once.</p>
 <p>We also consider everyone to have advantage against fleeing combatants.</p>
@@ -498,7 +498,7 @@ This is new compared to the base handler.</p>
 <span class="hll"><span class="linenos">49</span>            <span class="n">surviving_combatant</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span class="linenos">50</span>            <span class="n">allies</span><span class="p">,</span> <span class="n">enemies</span> <span class="o">=</span> <span class="p">(),</span> <span class="p">()</span>
 <span class="linenos">51</span>        <span class="k">else</span><span class="p">:</span>
-<span class="linenos">52</span>            <span class="c1"># grab a random survivor and check of they have any living enemies.</span>
+<span class="linenos">52</span>            <span class="c1"># grab a random survivor and check if they have any living enemies.</span>
 <span class="linenos">53</span>            <span class="n">surviving_combatant</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">combatants</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 <span class="linenos">54</span>            <span class="n">allies</span><span class="p">,</span> <span class="n">enemies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sides</span><span class="p">(</span><span class="n">surviving_combatant</span><span class="p">)</span>
 <span class="linenos">55</span>
@@ -764,7 +764,7 @@ This is new compared to the base handler.</p>
 </section>
 <section id="stepping-through-the-wizard">
 <h3><span class="section-number">11.4.5. </span>Stepping through the wizard<a class="headerlink" href="#stepping-through-the-wizard" title="Link to this heading">¶</a></h3>
-<p>Our particualr menu is very symmetric - you select an option and then you will just select a series of option before you come back. So we will make another goto-function to help us easily do this. To understand, let’s first show how we plan to use this:</p>
+<p>Our particular menu is very symmetric - you select an option and then you will just select a series of option before you come back. So we will make another goto-function to help us easily do this. To understand, let’s first show how we plan to use this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in the base combat-node function (just shown as an example)</span>
 
 <span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
@@ -844,7 +844,7 @@ This is new compared to the base handler.</p>
 
 <span class="c1"># ...</span>
 
-<span class="n">_get_default_wizard_options</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_default_wizard_options</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;back&quot;</span><span class="p">,</span>
@@ -956,7 +956,6 @@ This is new compared to the base handler.</p>
             <span class="n">Ability</span><span class="o">.</span><span class="n">DEX</span><span class="p">,</span>
             <span class="n">Ability</span><span class="o">.</span><span class="n">CON</span><span class="p">,</span>
             <span class="n">Ability</span><span class="o">.</span><span class="n">INT</span><span class="p">,</span>
-            <span class="n">Ability</span><span class="o">.</span><span class="n">INT</span><span class="p">,</span>
             <span class="n">Ability</span><span class="o">.</span><span class="n">WIS</span><span class="p">,</span>
             <span class="n">Ability</span><span class="o">.</span><span class="n">CHA</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1001,7 +1000,7 @@ This is new compared to the base handler.</p>
 </pre></div>
 </div>
 <p>Our <a class="reference internal" href="Beginner-Tutorial-Equipment.html"><span class="std std-doc">equipment handler</span></a> has the very useful help method <code class="docutils literal notranslate"><span class="pre">.get_usable_objects_from_backpack</span></code>. We just call this to get a list of all the items we want to choose. Otherwise this node should look pretty familiar by now.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">node_choose_wiqld_item</span></code> is very similar, except it uses <code class="docutils literal notranslate"><span class="pre">caller.equipment.get_wieldable_objects_from_backpack()</span></code> instead. We’ll leave the implementation of this up to the reader.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">node_choose_wield_item</span></code> is very similar, except it uses <code class="docutils literal notranslate"><span class="pre">caller.equipment.get_wieldable_objects_from_backpack()</span></code> instead. We’ll leave the implementation of this up to the reader.</p>
 </section>
 <section id="the-main-menu-node">
 <h3><span class="section-number">11.4.9. </span>The main menu node<a class="headerlink" href="#the-main-menu-node" title="Link to this heading">¶</a></h3>
@@ -1103,12 +1102,12 @@ This is new compared to the base handler.</p>
 </pre></div>
 </div>
 <p>This starts off the <code class="docutils literal notranslate"><span class="pre">_step_wizard</span></code> for each action choice. It also lays out the <code class="docutils literal notranslate"><span class="pre">action_dict</span></code> for every action, leaving <code class="docutils literal notranslate"><span class="pre">None</span></code> values for the fields that will be set by the following nodes.</p>
-<p>Note how we add the <code class="docutils literal notranslate"><span class="pre">&quot;repeat&quot;</span></code> key to some actions. Having them automatically repeat means the player don’t have to insert the same action every time.</p>
+<p>Note how we add the <code class="docutils literal notranslate"><span class="pre">&quot;repeat&quot;</span></code> key to some actions. Having them automatically repeat means the player doesn’t have to insert the same action every time.</p>
 </section>
 </section>
 <section id="attack-command">
 <h2><span class="section-number">11.5. </span>Attack Command<a class="headerlink" href="#attack-command" title="Link to this heading">¶</a></h2>
-<p>We will only need one single Command to run the Turnbased combat system. This is the <code class="docutils literal notranslate"><span class="pre">attack</span></code> command. Once you use it once, you will be in the menu.</p>
+<p>We will only need one single command to run the turnbased combat system. This is the <code class="docutils literal notranslate"><span class="pre">attack</span></code> command. Once you use it once, you will be in the menu.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in evadventure/combat_turnbased.py</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">CmdSet</span><span class="p">,</span> <span class="n">EvMenu</span>
@@ -1319,7 +1318,7 @@ This is new compared to the base handler.</p>
 <p>If editing this in an IDE, you may get errors on the <code class="docutils literal notranslate"><span class="pre">player</span> <span class="pre">=</span> <span class="pre">caller</span></code> line. This is because <code class="docutils literal notranslate"><span class="pre">caller</span></code> is not defined anywhere in this file. Instead <code class="docutils literal notranslate"><span class="pre">caller</span></code> (the one running the script) is injected by the <code class="docutils literal notranslate"><span class="pre">batchcode</span></code> runner.</p>
 <p>But apart from the <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">HEADER</span></code> and <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">CODE</span></code> specials, this just a series of normal Evennia api calls.</p>
 <p>Log into the game with a developer/superuser account and run</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt; batchcmd evadventure.batchscripts.turnbased_combat_demo
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt; batchcode evadventure.batchscripts.turnbased_combat_demo
 </pre></div>
 </div>
 <p>This should place you in the arena with the dummy (if not, check for errors in the output! Use <code class="docutils literal notranslate"><span class="pre">objects</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code> commands to list and delete objects if you need to start over.)</p>
@@ -1327,7 +1326,7 @@ This is new compared to the base handler.</p>
 </section>
 <section id="conclusions">
 <h2><span class="section-number">11.9. </span>Conclusions<a class="headerlink" href="#conclusions" title="Link to this heading">¶</a></h2>
-<p>At this point we have coverered some ideas on how to implement both twitch- and turnbased combat systems. Along the way you have been exposed to many concepts such as classes, scripts and handlers, Commands, EvMenus and more.</p>
+<p>At this point we have covered some ideas on how to implement both twitch- and turnbased combat systems. Along the way you have been exposed to many concepts such as classes, scripts and handlers, Commands, EvMenus and more.</p>
 <p>Before our combat system is actually usable, we need our enemies to actually fight back. We’ll get to that next.</p>
 </section>
 </section>

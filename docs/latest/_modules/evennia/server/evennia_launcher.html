@@ -59,7 +59,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArgumentParser</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">distutils.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">LooseVersion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">packaging.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">Version</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">STDOUT</span><span class="p">,</span> <span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">call</span><span class="p">,</span> <span class="n">check_output</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">django</span>
@@ -1372,9 +1372,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_test_python_version</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Test Python version&quot;&quot;&quot;</span>
         <span class="n">python_version</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
-        <span class="n">python_curr</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">python_version</span><span class="p">)</span>
-        <span class="n">python_min</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">PYTHON_MIN</span><span class="p">)</span>
-        <span class="n">python_max</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">PYTHON_MAX_TESTED</span><span class="p">)</span>
+        <span class="n">python_curr</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">python_version</span><span class="p">)</span>
+        <span class="n">python_min</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">PYTHON_MIN</span><span class="p">)</span>
+        <span class="n">python_max</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">PYTHON_MAX_TESTED</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">python_curr</span> <span class="o">&lt;</span> <span class="n">python_min</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">ERROR_PYTHON_VERSION</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_version</span><span class="o">=</span><span class="n">python_version</span><span class="p">,</span> <span class="n">python_min</span><span class="o">=</span><span class="n">PYTHON_MIN</span><span class="p">))</span>
@@ -1398,8 +1398,8 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">twisted_version</span> <span class="o">=</span> <span class="n">twisted</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">short</span><span class="p">()</span>
-            <span class="n">twisted_curr</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">twisted_version</span><span class="p">)</span>
-            <span class="n">twisted_min</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">TWISTED_MIN</span><span class="p">)</span>
+            <span class="n">twisted_curr</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">twisted_version</span><span class="p">)</span>
+            <span class="n">twisted_min</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">TWISTED_MIN</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">twisted_curr</span> <span class="o">&lt;</span> <span class="n">twisted_min</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
@@ -1420,11 +1420,9 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">django_version</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">django</span><span class="o">.</span><span class="n">VERSION</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
-            <span class="c1"># only the main version (1.5, not 1.5.4.0)</span>
-            <span class="n">django_version</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">django_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
-            <span class="n">django_curr</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">django_version</span><span class="p">)</span>
-            <span class="n">django_min</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">DJANGO_MIN</span><span class="p">)</span>
-            <span class="n">django_max</span> <span class="o">=</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">DJANGO_MAX_TESTED</span><span class="p">)</span>
+            <span class="n">django_curr</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">django_version</span><span class="p">)</span>
+            <span class="n">django_min</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">DJANGO_MIN</span><span class="p">)</span>
+            <span class="n">django_max</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">DJANGO_MAX_TESTED</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">django_curr</span> <span class="o">&lt;</span> <span class="n">django_min</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>

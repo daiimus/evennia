@@ -2722,6 +2722,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">multimatch</span><span class="p">,</span> <span class="s2">&quot;look&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 </div>
 
+
+<div class="viewcode-block" id="TestPreCmdOutputTestable">
+<a class="viewcode-back" href="../../../../api/evennia.commands.default.tests.html#evennia.commands.default.tests.TestPreCmdOutputTestable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestPreCmdOutputTestable</span><span class="p">(</span><span class="n">BaseEvenniaCommandTest</span><span class="p">):</span>
+<div class="viewcode-block" id="TestPreCmdOutputTestable.test_pre_cmd">
+<a class="viewcode-back" href="../../../../api/evennia.commands.default.tests.html#evennia.commands.default.tests.TestPreCmdOutputTestable.test_pre_cmd">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_pre_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">CmdTest</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">at_pre_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;This should be testable&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;This should never be executed&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">CmdTest</span><span class="p">(),</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;This should be testable&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>

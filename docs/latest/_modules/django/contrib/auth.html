@@ -246,7 +246,7 @@
     <span class="c1"># RemovedInDjango61Warning.</span>
     <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Fallback to request.user when user is None will be removed.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Fallback to request.auser() when user is None will be removed.&quot;</span><span class="p">,</span>
             <span class="n">RemovedInDjango61Warning</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>

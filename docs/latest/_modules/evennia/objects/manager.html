@@ -761,6 +761,11 @@
                     <span class="s2">&quot;or the setting is malformed.&quot;</span>
                 <span class="p">)</span>
 
+        <span class="c1"># db_key has NOT NULL constraint, convert None to empty string.</span>
+        <span class="c1"># at_first_save() will convert empty string to #dbref</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
         <span class="c1"># create new instance</span>
         <span class="n">new_object</span> <span class="o">=</span> <span class="n">typeclass</span><span class="p">(</span>
             <span class="n">db_key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>

@@ -1256,12 +1256,12 @@
 <span class="sd">        - &quot;$search(beach, category=outdoors, type=tag)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># clean out funcparser-specific kwargs so we can use the kwargs for</span>
+    <span class="c1"># clean out funcparser and protfunc_parser-specific kwargs so we can use the kwargs for</span>
     <span class="c1"># searching</span>
     <span class="n">search_kwargs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">value</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;funcparser&quot;</span><span class="p">,</span> <span class="s2">&quot;raise_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;return_list&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;funcparser&quot;</span><span class="p">,</span> <span class="s2">&quot;raise_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;return_list&quot;</span><span class="p">,</span> <span class="s2">&quot;prototype&quot;</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="n">return_list</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;return_list&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
 

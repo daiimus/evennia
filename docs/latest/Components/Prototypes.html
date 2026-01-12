@@ -228,13 +228,10 @@ easier later.</p></li>
 <td><p>Returns result of <a class="reference external" href="https://docs.python.org/2/library/ast.html#ast.literal_eval">literal-eval</a> of code string. Only simple python expressions.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">$obj(&lt;query&gt;)</span></code></p></td>
-<td><p>Returns object #dbref searched globally by key, tag or #dbref. Error if more than one found.</p></td>
+<td><p>Returns object searched globally by key, tag or #dbref. Requires <code class="docutils literal notranslate"><span class="pre">caller</span></code> kwarg in <code class="docutils literal notranslate"><span class="pre">spawner.spawn()</span></code> for access checks. See <a class="reference internal" href="FuncParser.html#evennia-utils-funcparser-searching-callables"><span class="std std-ref">searching callables</span></a>.  ($dbref(<query>) is an alias and works the same)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">$objlist(&lt;query&gt;)</span></code></p></td>
-<td><p>Like <code class="docutils literal notranslate"><span class="pre">$obj</span></code>, except always returns a list of zero, one or more results.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">$dbref(dbref)</span></code></p></td>
-<td><p>Returns argument if it is formed as a #dbref (e.g. #1234), otherwise error.</p></td>
+<td><p>Like <code class="docutils literal notranslate"><span class="pre">$obj</span></code>, except always returns a list of zero, one or more results. Requires <code class="docutils literal notranslate"><span class="pre">caller</span></code> kwarg in <code class="docutils literal notranslate"><span class="pre">spawner.spawn()</span></code> for access checks. See <a class="reference internal" href="FuncParser.html#evennia-utils-funcparser-searching-callables"><span class="std std-ref">searching callables</span></a>.</p></td>
 </tr>
 </tbody>
 </table>

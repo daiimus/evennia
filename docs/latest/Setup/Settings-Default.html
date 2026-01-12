@@ -416,16 +416,16 @@ to change into <code class="docutils literal notranslate"><span class="pre">myga
 <span class="c1"># The command parser module to use. See the default module for which</span>
 <span class="c1"># functions it must implement</span>
 <span class="n">COMMAND_PARSER</span> <span class="o">=</span> <span class="s2">&quot;evennia.commands.cmdparser.cmdparser&quot;</span>
-<span class="c1"># On a multi-match when search objects or commands, the user has the</span>
+<span class="c1"># On a multi-match when searching objects or commands, the user has the</span>
 <span class="c1"># ability to search again with an index marker that differentiates</span>
-<span class="c1"># the results. If multiple &quot;box&quot; objects</span>
-<span class="c1"># are found, they can by default be separated as 1-box, 2-box. Below you</span>
-<span class="c1"># can change the regular expression used. The regex must have one</span>
-<span class="c1"># have two capturing groups (?P&lt;number&gt;...) and (?P&lt;name&gt;...) - the default</span>
-<span class="c1"># parser expects this. It should also involve a number starting from 1.</span>
-<span class="c1"># When changing this you must also update SEARCH_MULTIMATCH_TEMPLATE</span>
+<span class="c1"># the results. If multiple &quot;box&quot; objects are found, they can by default</span>
+<span class="c1"># be separated as box-1, box-2. Below you can change the regular expression</span>
+<span class="c1"># used. The regex must have two capturing groups (?P&lt;number&gt;...) and</span>
+<span class="c1"># (?P&lt;name&gt;...) - the default parser expects this. It may also have an</span>
+<span class="c1"># optional (?P&lt;args&gt;...) group. It should also involve a number starting</span>
+<span class="c1"># from 1. When changing this you must also update SEARCH_MULTIMATCH_TEMPLATE</span>
 <span class="c1"># to properly describe the syntax.</span>
-<span class="n">SEARCH_MULTIMATCH_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?P&lt;name&gt;[^-]*)-(?P&lt;number&gt;[0-9]+)(?P&lt;args&gt;.*)&quot;</span>
+<span class="n">SEARCH_MULTIMATCH_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(?P&lt;name&gt;.*?)-(?P&lt;number&gt;[0-9]+)(?P&lt;args&gt;(?:\s.*)?)$&quot;</span>
 <span class="c1"># To display multimatch errors in various listings we must display</span>
 <span class="c1"># the syntax in a way that matches what SEARCH_MULTIMATCH_REGEX understand.</span>
 <span class="c1"># The template will be populated with data and expects the following markup:</span>

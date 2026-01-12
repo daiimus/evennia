@@ -61,28 +61,28 @@ RPG, it will hold everything relevant to that PC.</p>
 <p>Player Characters (PCs) are not the only “living” things in our world. We also have <em>NPCs</em>
 (like shopkeepers and other friendlies) as well as <em>monsters</em> (mobs) that can attack us.</p>
 <p>In code, there are a few ways we could structure this. If NPCs/monsters were just special cases of PCs, we could use a class inheritance like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">DefaultCharacter</span><span class="p">):</span> 
-    <span class="c1"># stuff </span>
-    
+<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">DefaultCharacter</span><span class="p">):</span>
+    <span class="c1"># stuff</span>
+
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureNPC</span><span class="p">(</span><span class="n">EvAdventureCharacter</span><span class="p">):</span>
-    <span class="c1"># more stuff </span>
-    
-<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureMob</span><span class="p">(</span><span class="n">EvAdventureNPC</span><span class="p">):</span> 
-    <span class="c1"># more stuff </span>
+    <span class="c1"># more stuff</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureMob</span><span class="p">(</span><span class="n">EvAdventureNPC</span><span class="p">):</span>
+    <span class="c1"># more stuff</span>
 </pre></div>
 </div>
 <p>All code we put on the <code class="docutils literal notranslate"><span class="pre">Character</span></code> class would now be inherited to <code class="docutils literal notranslate"><span class="pre">NPC</span></code> and <code class="docutils literal notranslate"><span class="pre">Mob</span></code> automatically.</p>
 <p>However, in <em>Knave</em>, NPCs and particularly monsters are <em>not</em> using the same rules as PCs - they are simplified to use a Hit-Die (HD) concept. So while still character-like, NPCs should be separate from PCs like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">DefaultCharacter</span><span class="p">):</span> 
-    <span class="c1"># stuff </span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">DefaultCharacter</span><span class="p">):</span>
+    <span class="c1"># stuff</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureNPC</span><span class="p">(</span><span class="n">DefaultCharacter</span><span class="p">):</span>
-    <span class="c1"># separate stuff </span>
-    
+    <span class="c1"># separate stuff</span>
+
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureMob</span><span class="p">(</span><span class="n">EvadventureNPC</span><span class="p">):</span>
     <span class="c1"># more separate stuff</span>
 </pre></div>
@@ -97,17 +97,17 @@ RPG, it will hold everything relevant to that PC.</p>
 <li><p>All can get looted when defeated.</p></li>
 </ul>
 <p>We don’t want to code this separately for every class but we no longer have a common parent  class to put it on. So instead we’ll use the concept of a <em>mixin</em> class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LivingMixin</span><span class="p">:</span>
     <span class="c1"># stuff common for all living things</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">DefaultCharacter</span><span class="p">):</span> 
-    <span class="c1"># stuff </span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">DefaultCharacter</span><span class="p">):</span>
+    <span class="c1"># stuff</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureNPC</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">DefaultCharacter</span><span class="p">):</span>
-    <span class="c1"># stuff </span>
-    
+    <span class="c1"># stuff</span>
+
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureMob</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">EvadventureNPC</span><span class="p">):</span>
     <span class="c1"># more stuff</span>
 </pre></div>
@@ -116,7 +116,7 @@ RPG, it will hold everything relevant to that PC.</p>
 <p>In <a class="reference internal" href="../../../api/evennia.contrib.tutorials.evadventure.characters.html"><span class="std std-doc">evennia/contrib/tutorials/evadventure/characters.py</span></a>
 is an example of a character class structure.</p>
 </aside>
-<p>Above, the <code class="docutils literal notranslate"><span class="pre">LivingMixin</span></code> class cannot work on its own - it just ‘patches’ the other classes with some  extra functionality all living things should be able to do. This is an example of  <em>multiple inheritance</em>. It’s useful to know about, but one should not over-do multiple inheritance since it can also get confusing to follow the code.</p>
+<p>Above, the <code class="docutils literal notranslate"><span class="pre">LivingMixin</span></code> class cannot work on its own - it just ‘patches’ the other classes with some  extra functionality all living things should be able to do. This is an example of  <em>multiple inheritance</em>. The order of inheritance matters here - the <code class="docutils literal notranslate"><span class="pre">LivingMixin</span></code> must come <em>before</em> <code class="docutils literal notranslate"><span class="pre">DefaultCharacter</span></code> (or EvAdventureNPC etc) so that its methods are found first when called.Multiple inheritance is a powerful tool in object-oriented programming, and useful to know about. Be careful to over-use it, however. If you have too many mixins it can get hard to follow which method comes from where.</p>
 </section>
 <section id="living-mixin-class">
 <h2><span class="section-number">3.2. </span>Living mixin class<a class="headerlink" href="#living-mixin-class" title="Link to this heading">¶</a></h2>
@@ -124,14 +124,14 @@ is an example of a character class structure.</p>
 <div><p>Create a new module <code class="docutils literal notranslate"><span class="pre">mygame/evadventure/characters.py</span></code></p>
 </div></blockquote>
 <p>Let’s get some useful common methods all living things should have in our game.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in mygame/evadventure/characters.py </span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in mygame/evadventure/characters.py</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.rules</span><span class="w"> </span><span class="kn">import</span> <span class="n">dice</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rules</span><span class="w"> </span><span class="kn">import</span> <span class="n">dice</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LivingMixin</span><span class="p">:</span>
 
     <span class="c1"># makes it easy for mobs to know to attack PCs</span>
-    <span class="n">is_pc</span> <span class="o">=</span> <span class="kc">False</span>  
+    <span class="n">is_pc</span> <span class="o">=</span> <span class="kc">False</span>
 
 	<span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">hurt_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -156,49 +156,49 @@ is an example of a character class structure.</p>
         <span class="k">elif</span> <span class="n">percent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;|RCollapsed!|n&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">heal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hp</span><span class="p">):</span> 
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">heal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hp</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Heal hp amount of health, not allowing to exceed our max hp</span>
-<span class="sd">         </span>
-<span class="sd">        &quot;&quot;&quot;</span> 
-        <span class="n">damage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp_max</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> 
-        <span class="n">healed</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">damage</span><span class="p">,</span> <span class="n">hp</span><span class="p">)</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">+=</span> <span class="n">healed</span> 
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You heal for </span><span class="si">{</span><span class="n">healed</span><span class="si">}</span><span class="s2"> HP.&quot;</span><span class="p">)</span> 
-        
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">damage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp_max</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span>
+        <span class="n">healed</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">damage</span><span class="p">,</span> <span class="n">hp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">+=</span> <span class="n">healed</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You heal for </span><span class="si">{</span><span class="n">healed</span><span class="si">}</span><span class="s2"> HP.&quot;</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_pay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;When paying coins, make sure to never detract more than we have&quot;&quot;&quot;</span>
         <span class="n">amount</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coins</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coins</span> <span class="o">-=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="n">amount</span>
-        
-    <span class="k">def</span><span class="w"> </span><span class="nf">at_attacked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">at_attacked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Called when being attacked and combat starts.&quot;&quot;&quot;</span>
 		<span class="k">pass</span>
-    
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">damage</span><span class="p">,</span> <span class="n">attacker</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when attacked and taking damage.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">-=</span> <span class="n">damage</span>  
-        
-    <span class="k">def</span><span class="w"> </span><span class="nf">at_defeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">-=</span> <span class="n">damage</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">at_defeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when defeated. By default this means death.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">at_death</span><span class="p">()</span>
-        
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_death</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when this thing dies.&quot;&quot;&quot;</span>
         <span class="c1"># this will mean different things for different living things</span>
-        <span class="k">pass</span> 
-        
+        <span class="k">pass</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_do_loot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">looted</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when looting another entity&quot;&quot;&quot;</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when looting another entity&quot;&quot;&quot;</span>
         <span class="n">looted</span><span class="o">.</span><span class="n">at_looted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_looted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">looter</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when looted by another entity&quot;&quot;&quot;</span> 
-        
-        <span class="c1"># default to stealing some coins </span>
-        <span class="n">max_steal</span> <span class="o">=</span> <span class="n">dice</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="s2">&quot;1d10&quot;</span><span class="p">)</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when looted by another entity&quot;&quot;&quot;</span>
+
+        <span class="c1"># default to stealing some coins</span>
+        <span class="n">max_steal</span> <span class="o">=</span> <span class="n">dice</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="s2">&quot;1d10&quot;</span><span class="p">)</span>
         <span class="n">stolen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_pay</span><span class="p">(</span><span class="n">max_steal</span><span class="p">)</span>
         <span class="n">looter</span><span class="o">.</span><span class="n">coins</span> <span class="o">+=</span> <span class="n">stolen</span>
 
@@ -213,28 +213,28 @@ is an example of a character class structure.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in mygame/evadventure/characters.py</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span><span class="p">,</span> <span class="n">AttributeProperty</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.rules</span><span class="w"> </span><span class="kn">import</span> <span class="n">dice</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rules</span><span class="w"> </span><span class="kn">import</span> <span class="n">dice</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LivingMixin</span><span class="p">:</span>
-    <span class="c1"># ... </span>
+    <span class="c1"># ...</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">DefaultCharacter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    A character to use for EvAdventure. </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A character to use for EvAdventure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">is_pc</span> <span class="o">=</span> <span class="kc">True</span> 
+    <span class="n">is_pc</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="n">strength</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="n">strength</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">dexterity</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">constitution</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">intelligence</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">wisdom</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">charisma</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    
-    <span class="n">hp</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> 
+
+    <span class="n">hp</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">hp_max</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-    
+
     <span class="n">level</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">xp</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">coins</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -249,13 +249,13 @@ is an example of a character class structure.</p>
                 <span class="s2">&quot;$You() $conj(collapse) in a heap, alive but beaten.&quot;</span><span class="p">,</span>
                 <span class="n">from_obj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp_max</span><span class="p">)</span>
-            
+
     <span class="k">def</span><span class="w"> </span><span class="nf">at_death</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;We rolled &#39;dead&#39; on the death table.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">msg_contents</span><span class="p">(</span>
             <span class="s2">&quot;$You() collapse in a heap, embraced by death.&quot;</span><span class="p">,</span>
-            <span class="n">from_obj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> 
-        <span class="c1"># TODO - go back into chargen to make a new character!            </span>
+            <span class="n">from_obj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># TODO - go back into chargen to make a new character!</span>
 </pre></div>
 </div>
 <p>We make an assumption about our rooms here - that they have a property <code class="docutils literal notranslate"><span class="pre">.allow_death</span></code>. We need  to make a note to actually add such a property to rooms later!</p>
@@ -287,26 +287,26 @@ is an example of a character class structure.</p>
 <section id="backtracking">
 <h3><span class="section-number">3.3.2. </span>Backtracking<a class="headerlink" href="#backtracking" title="Link to this heading">¶</a></h3>
 <p>We make our first use of the <code class="docutils literal notranslate"><span class="pre">rules.dice</span></code> roller to roll on the death table! As you may recall, in the previous lesson, we didn’t know just what to do when rolling ‘dead’ on this table. Now we know - we should be calling <code class="docutils literal notranslate"><span class="pre">at_death</span></code> on the character. So let’s add that where we had TODOs before:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mygame/evadventure/rules.py </span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mygame/evadventure/rules.py</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureRollEngine</span><span class="p">:</span>
-    
-    <span class="c1"># ... </span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">roll_death</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">):</span> 
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">roll_death</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">):</span>
         <span class="n">ability_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">roll_random_table</span><span class="p">(</span><span class="s2">&quot;1d8&quot;</span><span class="p">,</span> <span class="n">death_table</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ability_name</span> <span class="o">==</span> <span class="s2">&quot;dead&quot;</span><span class="p">:</span>
             <span class="c1"># kill the character!</span>
             <span class="n">character</span><span class="o">.</span><span class="n">at_death</span><span class="p">()</span>  <span class="c1"># &lt;------ TODO no more</span>
-        <span class="k">else</span><span class="p">:</span> 
-            <span class="c1"># ... </span>
-                        
-            <span class="k">if</span> <span class="n">current_ability</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">:</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># ...</span>
+
+            <span class="k">if</span> <span class="n">current_ability</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">:</span>
                 <span class="c1"># kill the character!</span>
                 <span class="n">character</span><span class="o">.</span><span class="n">at_death</span><span class="p">()</span>  <span class="c1"># &lt;------- TODO no more</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># ... </span>
+                <span class="c1"># ...</span>
 </pre></div>
 </div>
 </section>
@@ -340,12 +340,12 @@ instead.</p>
 <div><p>Create a new module <code class="docutils literal notranslate"><span class="pre">mygame/evadventure/tests/test_characters.py</span></code></p>
 </div></blockquote>
 <p>For testing, we just need to create a new EvAdventure character and check  that calling the methods on it doesn’t error out.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mygame/evadventure/tests/test_characters.py </span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mygame/evadventure/tests/test_characters.py</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">create</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">evennia.utils.test_resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEvenniaTest</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">evennia.utils.test_resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEvenniaTest</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..characters</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvAdventureCharacter</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">..characters</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvAdventureCharacter</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TestCharacters</span><span class="p">(</span><span class="n">BaseEvenniaTest</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -353,28 +353,28 @@ instead.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">character</span> <span class="o">=</span> <span class="n">create</span><span class="o">.</span><span class="n">create_object</span><span class="p">(</span><span class="n">EvAdventureCharacter</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;testchar&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_heal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="mi">0</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp_max</span> <span class="o">=</span> <span class="mi">8</span> 
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp_max</span> <span class="o">=</span> <span class="mi">8</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># make sure we can&#39;t heal more than max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">hp</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-        
+
     <span class="k">def</span><span class="w"> </span><span class="nf">test_at_pay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">coins</span> <span class="o">=</span> <span class="mi">100</span> 
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">coins</span> <span class="o">=</span> <span class="mi">100</span>
+
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">at_pay</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">coins</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
-        
-        <span class="c1"># can&#39;t get more coins than we have </span>
+
+        <span class="c1"># can&#39;t get more coins than we have</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">at_pay</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">coins</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        
-    <span class="c1"># tests for other methods ... </span>
+
+    <span class="c1"># tests for other methods ...</span>
 
 </pre></div>
 </div>
@@ -391,11 +391,11 @@ instead.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mygame/evadventure/characters.py</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultCharacter</span><span class="p">,</span> <span class="n">AttributeProperty</span>
-<span class="c1"># ... </span>
+<span class="c1"># ...</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EvAdventureCharacter</span><span class="p">(</span><span class="n">LivingMixin</span><span class="p">,</span> <span class="n">DefaultCharacter</span><span class="p">):</span>
-    
-    <span class="c1"># ... </span>
+
+    <span class="c1"># ...</span>
 
     <span class="n">charclass</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="s2">&quot;Fighter&quot;</span><span class="p">)</span>
     <span class="n">charrace</span> <span class="o">=</span> <span class="n">AttributeProperty</span><span class="p">(</span><span class="s2">&quot;Human&quot;</span><span class="p">)</span>
@@ -410,7 +410,7 @@ instead.</p>
 <h2><span class="section-number">3.7. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
 <p>With the <code class="docutils literal notranslate"><span class="pre">EvAdventureCharacter</span></code> class in place, we have a better understanding of how our PCs will look  like under <em>Knave</em>.</p>
 <p>For now, we only have bits and pieces and haven’t been testing this code in-game. But if you want  you can swap yourself into <code class="docutils literal notranslate"><span class="pre">EvAdventureCharacter</span></code> right now. Log into your game and run the command</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>type self = evadventure.characters.EvAdventureCharacter 
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>type self = evadventure.characters.EvAdventureCharacter
 </pre></div>
 </div>
 <p>If all went well, <code class="docutils literal notranslate"><span class="pre">ex</span> <span class="pre">self</span></code> will now show your typeclass as being <code class="docutils literal notranslate"><span class="pre">EvAdventureCharacter</span></code>.  Check out your strength with</p>

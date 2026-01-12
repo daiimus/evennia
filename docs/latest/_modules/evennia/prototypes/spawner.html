@@ -715,7 +715,8 @@
 <span class="sd">            if it&#39;s not set in the prototype. With `exact=True`, all un-specified properties of the</span>
 <span class="sd">            objects will be removed if they exist. This will lead to a more accurate 1:1 correlation</span>
 <span class="sd">            between the  object and the prototype but is usually impractical.</span>
-<span class="sd">        caller (Object or Account, optional): This may be used by protfuncs to do permission checks.</span>
+<span class="sd">        caller (Object or Account, optional): The object requesting the update. Required when using</span>
+<span class="sd">            protofuncs that perform searches. For example ($obj, $objlist, $dbref, $search).</span>
 <span class="sd">        protfunc_raise_errors (bool): Have protfuncs raise explicit errors if malformed/not found.</span>
 <span class="sd">            This is highly recommended.</span>
 <span class="sd">    Returns:</span>
@@ -866,7 +867,7 @@
             <span class="n">changed</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">spawn_hook</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;at_object_post_spawn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">spawn_hook</span><span class="p">(</span><span class="n">prototype</span><span class="o">=</span><span class="n">prototype</span><span class="p">)</span>
+                <span class="n">spawn_hook</span><span class="p">(</span><span class="n">prototype</span><span class="o">=</span><span class="n">new_prototype</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">changed</span></div>
 
@@ -958,7 +959,8 @@
 <span class="sd">            prototype_key (will be used to find the prototype) or a full prototype</span>
 <span class="sd">            dictionary. These will be batched-spawned as one object each.</span>
 <span class="sd">    Keyword Args:</span>
-<span class="sd">        caller (Object or Account, optional): This may be used by protfuncs to do access checks.</span>
+<span class="sd">        caller (Object or Account, optional): The object requesting the update. Required when using</span>
+<span class="sd">            protofuncs that perform searches. For example ($obj, $objlist, $dbref, $search).</span>
 <span class="sd">        prototype_modules (str or list): A python-path to a prototype</span>
 <span class="sd">            module, or a list of such paths. These will be used to build</span>
 <span class="sd">            the global protparents dictionary accessible by the input</span>

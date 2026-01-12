@@ -518,7 +518,6 @@
         <span class="n">cmdobj</span><span class="o">.</span><span class="n">raw_string</span> <span class="o">=</span> <span class="n">raw_string</span> <span class="k">if</span> <span class="n">raw_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">input_args</span>
         <span class="n">cmdobj</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span> <span class="ow">or</span> <span class="p">(</span><span class="n">caller</span> <span class="k">if</span> <span class="n">caller</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">char1</span><span class="p">)</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="ow">or</span> <span class="p">[]</span>
-
         <span class="c1"># set up receivers</span>
         <span class="n">receiver_mapping</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -543,42 +542,40 @@
         <span class="c1"># cmdhandler. This will have the mocked .msg be called as part of the</span>
         <span class="c1"># execution. Mocks remembers what was sent to them so we will be able</span>
         <span class="c1"># to retrieve what was sent later.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">at_pre_cmd</span><span class="p">():</span>
-                <span class="k">return</span>
-            <span class="n">cmdobj</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
-
-            <span class="c1"># handle func&#39;s with yield in them (making them generators)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">inp</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="k">if</span> <span class="n">inputs</span> <span class="k">else</span> <span class="kc">None</span>
-                        <span class="k">if</span> <span class="n">inp</span><span class="p">:</span>
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="c1"># this mimics a user&#39;s reply to a prompt</span>
-                                <span class="n">ret</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
-                            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">at_pre_cmd</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cmdobj</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+                <span class="c1"># handle func&#39;s with yield in them (making them generators)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
+                    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">inp</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="k">if</span> <span class="n">inputs</span> <span class="k">else</span> <span class="kc">None</span>
+                            <span class="k">if</span> <span class="n">inp</span><span class="p">:</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="c1"># this mimics a user&#39;s reply to a prompt</span>
+                                    <span class="n">ret</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+                                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                                    <span class="nb">next</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+                                    <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># non-input yield, like yield(10). We don&#39;t pause</span>
+                                <span class="c1"># but fire it immediately.</span>
                                 <span class="nb">next</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
-                                <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="c1"># non-input yield, like yield(10). We don&#39;t pause</span>
-                            <span class="c1"># but fire it immediately.</span>
-                            <span class="nb">next</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
-                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-                        <span class="k">break</span>
+                        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                            <span class="k">break</span>
 
-            <span class="n">cmdobj</span><span class="o">.</span><span class="n">at_post_cmd</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">except</span> <span class="n">InterruptCommand</span><span class="p">:</span>
-            <span class="k">pass</span>
+                <span class="n">cmdobj</span><span class="o">.</span><span class="n">at_post_cmd</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">InterruptCommand</span><span class="p">:</span>
+                <span class="k">pass</span>
 
-        <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
-            <span class="c1"># if there are any inputs left, we may have a non-generator</span>
-            <span class="c1"># input to handle (get_input/ask_yes_no that uses a separate</span>
-            <span class="c1"># cmdset rather than a yield</span>
-            <span class="n">caller</span><span class="o">.</span><span class="n">execute_cmd</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+                <span class="c1"># if there are any inputs left, we may have a non-generator</span>
+                <span class="c1"># input to handle (get_input/ask_yes_no that uses a separate</span>
+                <span class="c1"># cmdset rather than a yield</span>
+                <span class="n">caller</span><span class="o">.</span><span class="n">execute_cmd</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
 
         <span class="c1"># At this point the mocked .msg methods on each receiver will have</span>
         <span class="c1"># stored all calls made to them (that&#39;s a basic function of the Mock</span>

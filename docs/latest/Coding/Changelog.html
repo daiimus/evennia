@@ -49,8 +49,35 @@
 <section id="main-branch">
 <h2>Main branch<a class="headerlink" href="#main-branch" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3799">Fix</a>: Fix typo in <code class="docutils literal notranslate"><span class="pre">basic_tc.py</span></code> contrib for beginner tutorial (Tharic99)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3800">Doc</a>: Describe support for Telnet SSH in HAProxy documentation (holl0wstar)</p></li>
+<li><p>Security dependency updates: Django &gt;5.2.8 (&lt;5.3), Django RestFramework 3.16</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3599">Feat</a>: Make at_pre_cmd</p></li>
+<li><p>[Fix]: API /openapi/setattribute endpoints were both POST and PUT, causing schema
+errors; now changed to PUT only. (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3799">Fix</a>: Fix typo in <code class="docutils literal notranslate"><span class="pre">basic_tc.py</span></code> contrib for beginner tutorial (Tharic99)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3806">Fix</a>: EvMore wouldn’t pass Session to next cmd when exiting (gas-public-wooden-clean)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3809">Fix</a>: Admin page - Repair link to Account button (UserlandAlchemist)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3811">Fix</a>: Website login banner shows before login attempt (UserlandAlchemist)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3817">Fix</a>: <code class="docutils literal notranslate"><span class="pre">ingame_reports</span></code> i18n fix (peddn)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3818">Fix</a>: Update spawn hook to use <code class="docutils literal notranslate"><span class="pre">new_prototype</span></code> (InspectorCaracal)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3815">Fix</a>: Performance improvement in large cmdset mergers (blongden)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3831">Fix</a>: Performance optimization in ANSIString, performance boost for large colored
+strings (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3832">Fix</a>: Fix typo in prototype causing homogenized locks to use
+fallbacks incorrectly (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3834">Fix</a>: Fix so <code class="docutils literal notranslate"><span class="pre">$obj(#123)</span></code> inline function works in prototype spawning (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3836">Fix</a>: Correctly handling calling <code class="docutils literal notranslate"><span class="pre">create_object</span></code> with <code class="docutils literal notranslate"><span class="pre">key=None</span></code> (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3852">Fix</a>: Django 5.2+ was not properly detected. Fixing distutils being
+removed in py3.12 for new installs (count-infinity)</p></li>
+<li><p>[Fix][pull3845]: Fix exponential ANSI markup explosions when slicing
+ANSIString after reset (speeds up EvForm other string ops, fixes compatibility) (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3853">Fix</a>: Properly handle multimatch separations with native dashes, like
+‘t-shirt-1’ (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3801">Doc</a>: Move Evennia doc build system to latest Sphinx/myST
+(PowershellNinja, also honorary mention to electroglyph)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3800">Doc</a>: Describe support for Telnet SSH in HAProxy documentation (holl0wstar)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3825">Doc</a>: Update Portuguese translation (marado)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3826">Doc</a>: Fix broken links in README (marado)</p></li>
+<li><p>Docs: marado, Griatch, Hasna878, count-infinity</p></li>
 </ul>
 </section>
 <section id="evennia-5-0-1">
@@ -71,10 +98,10 @@ Python versions: 3.11, 3.12, 3.13.</p>
 <ul class="simple">
 <li><p>Feat (backwards incompatible): RUN MIGRATIONS (<code class="docutils literal notranslate"><span class="pre">evennia</span> <span class="pre">migrate</span></code>): Now requiring Django 5.1 (Griatch)</p></li>
 <li><p>Feat (backwards incompatible): Drop support and testing for Python 3.10 (Griatch)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3719">Feat</a>: Support Python 3.13. (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3719">Feat</a>: Support Python 3.13. (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3633">Feat</a>: Default object’s default descs are now taken from a <code class="docutils literal notranslate"><span class="pre">default_description</span></code>
 class variable instead of the <code class="docutils literal notranslate"><span class="pre">desc</span></code> Attribute always being set (count-infinity)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3718">Feat</a>: Remove twistd.bat creation for Windows, should not be needed anymore (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3718">Feat</a>: Remove twistd.bat creation for Windows, should not be needed anymore (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3756">Feat</a>: Updated German translation (JohnFi)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3757">Feat</a>: Add more i18n strings to <code class="docutils literal notranslate"><span class="pre">DefaultObject</span></code> for easier translation (JohnFi)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3783">Feat</a>: Support users of <code class="docutils literal notranslate"><span class="pre">ruff</span></code> linter by adding compatible config in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> (jaborsh)</p></li>
@@ -90,8 +117,8 @@ finds <code class="docutils literal notranslate"><span class="pre">big</span> <s
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3690">Fix</a>: In searches, allow special ‘here’ and ‘me’ keywords only be valid queries
 unless current location and/or caller is in valid search candidates respectively (InspectorCaracal)</p></li>
 <li><p>[Fix][pull3694]: Funcparser swallowing rest of line after a <code class="docutils literal notranslate"><span class="pre">\</span></code>-escape (count-infinity)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3705">Fix</a>: Properly serialize <code class="docutils literal notranslate"><span class="pre">IntFlag</span></code> enum types (0xDEADFED5)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3707">Fix</a>: Correct links in <code class="docutils literal notranslate"><span class="pre">about</span></code> command (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3705">Fix</a>: Properly serialize <code class="docutils literal notranslate"><span class="pre">IntFlag</span></code> enum types (electroglyph)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3707">Fix</a>: Correct links in <code class="docutils literal notranslate"><span class="pre">about</span></code> command (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3710">Fix</a>: Clean reduntant session clearin in <code class="docutils literal notranslate"><span class="pre">at_server_cold_start</span></code> (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3711">Fix</a>: Usability improvements in the Discord integration (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3721">Fix</a>: Avoid loading cmdsets that don’t need to be checked, avoiding
@@ -107,7 +134,7 @@ a performance hit for loading cmdsets in rooms with a lot of objects (InspectorC
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3743">Fix</a>: Log full stack trace on failed object creation (aMiss-aWry)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3747">Fix</a>: TutorialWorld bridge-room didn’t correctly randomize weather effects (SpyrosRoum)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3765">Fix</a>: Storing TickerHandler <code class="docutils literal notranslate"><span class="pre">store_key</span></code> in a db attribute would not
-work correctly (0xDEADFED5)</p></li>
+work correctly (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3753">Fix</a>: Make sure <code class="docutils literal notranslate"><span class="pre">AttributeProperty</span></code>s are initialized with default values also in parent class (JohnFi)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3751">Fix</a>: The <code class="docutils literal notranslate"><span class="pre">access</span></code> and <code class="docutils literal notranslate"><span class="pre">inventory</span></code> commands would traceback if run on a character without an Account (EliasWatson)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3768">Fix</a>: Make sure the <code class="docutils literal notranslate"><span class="pre">CmdCopy</span></code> command copies object categories,
@@ -122,7 +149,7 @@ since otherwise plurals were lost (jaborsh)</p></li>
 it caused an OnDemandHandler save error on reload. Will now clean up on save. (Griatch)
 used as the task’s category (Griatch)</p></li>
 <li><p>Fix: Correct aws contrib’s use of legacy django string utils (Griatch)</p></li>
-<li><p>[Docs]: Fixes from InspectorCaracal, Griatch, ChrisLR, JohnFi, 0xDEADFED5, jaborsh, Problematic, BlaneWins</p></li>
+<li><p>[Docs]: Fixes from InspectorCaracal, Griatch, ChrisLR, JohnFi, electroglyph, jaborsh, Problematic, BlaneWins</p></li>
 </ul>
 </section>
 <section id="evennia-4-5-0">
@@ -183,7 +210,7 @@ Use <code class="docutils literal notranslate"><span class="pre">4.4.1</span></c
 <ul class="simple">
 <li><p>Feat: Support <code class="docutils literal notranslate"><span class="pre">scripts</span> <span class="pre">key:typeclass</span></code> to create global scripts
 with dynamic keys (rather than just relying on typeclass’ key) (Griatch)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3595">Feat</a>: Tweak Sqlite3 PRAGMAs for better performance (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3595">Feat</a>: Tweak Sqlite3 PRAGMAs for better performance (electroglyph)</p></li>
 <li><p>Feat: Make Sqlite3 PRAGMAs configurable via settings (Griatch)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3592">Feat</a>: Revised German locationlization (‘Du’ instead of ‘Sie’,
 cleanup) (Drakon72)</p></li>
@@ -192,7 +219,7 @@ search now partial matching all candidates, overall cleanup (InspectorCaracal)</
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3588">Feat</a>: New <code class="docutils literal notranslate"><span class="pre">DefaultObject</span></code> hooks: <code class="docutils literal notranslate"><span class="pre">at_object_post_creation</span></code>, called once after
 first creation but after any prototypes have been applied, and
 <code class="docutils literal notranslate"><span class="pre">at_object_post_spawn(prototype)</span></code>, called only after creation/update with a prototype (InspectorCaracal)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3594">Fix</a>: Update/clean some Evennia dependencies (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3594">Fix</a>: Update/clean some Evennia dependencies (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3556">Fix</a>: Better error if trying to treat ObjectDB as a typeclass (Griatch)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3590">Fix</a>: Make <code class="docutils literal notranslate"><span class="pre">examine</span></code> command properly show <code class="docutils literal notranslate"><span class="pre">strattr</span></code> type
 Attribute values (Griatch)</p></li>
@@ -206,7 +233,7 @@ names (chiizyjin)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3605">Fix</a>: Correctly pass node kwargs through <code class="docutils literal notranslate"><span class="pre">&#64;list_node</span></code> decorated evmenu nodes
 (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3597">Fix</a>: Address timing issue for testing <code class="docutils literal notranslate"><span class="pre">new_task_waiting_input</span> </code>on
-Windows (0xDEADFED5)</p></li>
+Windows (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3611">Fix</a>: Fix and update for Reports contrib (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3625">Fix</a>: Lycanthropy tutorial page had some issues (feyrkh)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3622">Fix</a>: Fix for examine command tracebacking with strvalue error
@@ -230,10 +257,10 @@ was removed since last reload (Griatch)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3531">Feat</a>: New contrib; <code class="docutils literal notranslate"><span class="pre">in-game</span> <span class="pre">reports</span></code> for handling user reports,
 bugs etc in-game (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3586">Feat</a>: Add ANSI color support <code class="docutils literal notranslate"><span class="pre">|U</span></code>, <code class="docutils literal notranslate"><span class="pre">|I</span></code>, <code class="docutils literal notranslate"><span class="pre">|i</span></code>, <code class="docutils literal notranslate"><span class="pre">|s</span></code>, <code class="docutils literal notranslate"><span class="pre">|S</span></code> for
-underline reset, italic/reset and strikethrough/reset (0xDEADFED5)</p></li>
+underline reset, italic/reset and strikethrough/reset (electroglyph)</p></li>
 <li><p>Feat: Add <code class="docutils literal notranslate"><span class="pre">Trait.traithandler</span></code> back-reference so custom Traits from the Traits
 contrib can find and reference other Traits. (Griatch)</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3582">Feat</a>: Add true-color parsing/fallback for ANSIString (0xDEADFED5)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3582">Feat</a>: Add true-color parsing/fallback for ANSIString (electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3571">Fix</a>: Better visual display of partial multimatch search results
 (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3578">Fix</a>: Prototype ‘alias’ key was not properly homogenized to a list
@@ -243,8 +270,8 @@ of local search on multimatch (InspectorCaracal)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3585">Fix</a>: <code class="docutils literal notranslate"><span class="pre">TagCmd.switch_options</span></code> was misnamed (erratic-pattern)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3580">Fix</a>: Fix typo that made <code class="docutils literal notranslate"><span class="pre">find/loc</span></code> show the wrong dbref in result (erratic-pattern)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3589">Fix</a>: Fix regex escaping in <code class="docutils literal notranslate"><span class="pre">utils.py</span></code> for future Python versions (hhsiao)</p></li>
-<li><p>[Docs]: Add True-color description for Colors documentation (0xDEADFED5)</p></li>
-<li><p>[Docs]: Doc fixes (Griatch, InspectorCaracal, 0xDEADFED5)</p></li>
+<li><p>[Docs]: Add True-color description for Colors documentation (electroglyph)</p></li>
+<li><p>[Docs]: Doc fixes (Griatch, InspectorCaracal, electroglyph)</p></li>
 </ul>
 </section>
 <section id="evennia-4-2-0">
