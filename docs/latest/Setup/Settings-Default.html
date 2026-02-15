@@ -331,6 +331,25 @@ to change into <code class="docutils literal notranslate"><span class="pre">myga
 <span class="c1"># debugging. OBS: Showing full tracebacks to regular users could be a</span>
 <span class="c1"># security problem -turn this off in a production game!</span>
 <span class="n">IN_GAME_ERRORS</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1"># Default masking regexes used by security/audit logging to avoid writing</span>
+<span class="c1"># cleartext credentials to logs. Each entry is a dict mapping an arbitrary</span>
+<span class="c1"># label to a regex with a named group `(?P&lt;secret&gt;...)` indicating what to mask.</span>
+<span class="c1"># You can override this list in your settings.py, or append to it to support</span>
+<span class="c1"># custom login/password commands:</span>
+<span class="c1">#     AUDIT_MASKS += [{&quot;mycmd&quot;: r&quot;^mycmd\\s+(?P&lt;secret&gt;.+)$&quot;}]</span>
+<span class="n">AUDIT_MASKS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;connect&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^\s*(?:connect|conn|con|co)\s+(&quot;[^&quot;]+&quot;|[^\s]+)\s+(?P&lt;secret&gt;.+)$&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^\s*(?:create|cre|cr)\s+(&quot;[^&quot;]+&quot;|[^\s]+)\s+(?P&lt;secret&gt;.+)$&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;userpassword&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^[@\s]*userpassword\s+(\w+|&quot;.+?&quot;)\s+=*\s*(?P&lt;secret&gt;[\w]+)$&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;userpassword&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^.*new password set to &#39;(?P&lt;secret&gt;[^&#39;]+)&#39;\.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;userpassword&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^.* has changed your password to &#39;(?P&lt;secret&gt;[^&#39;]+)&#39;\.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^[@\s]*(?:password|passwd)\s+(?P&lt;secret&gt;.*)$&quot;</span><span class="p">},</span>
+    <span class="c1"># Legacy typo-tolerant variants (kept for backwards compatibility with auditing behavior).</span>
+    <span class="p">{</span><span class="s2">&quot;connect&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^[@\s]*[connect]{5,8}\s+(&quot;.+?&quot;|[^\s]+)\s+(?P&lt;secret&gt;.+)$&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;connect&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^[@\s]*[connect]{5,8}\s+(?P&lt;secret&gt;[\w]+)$&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^[^@]?[create]{5,6}\s+(\w+|&quot;.+?&quot;)\s+(?P&lt;secret&gt;[\w]+)$&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^[^@]?[create]{5,6}\s+(?P&lt;secret&gt;[\w]+)$&quot;</span><span class="p">},</span>
+<span class="p">]</span>
 <span class="c1"># Broadcast &quot;Server restart&quot;-like messages to all sessions.</span>
 <span class="n">BROADCAST_SERVER_RESTART_MESSAGES</span> <span class="o">=</span> <span class="kc">True</span>
 

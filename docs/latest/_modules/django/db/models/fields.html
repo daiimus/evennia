@@ -970,9 +970,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">db_returning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Private API intended only to be used by Django itself.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">has_db_default</span><span class="p">()</span> <span class="ow">and</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">can_return_columns_from_insert</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_db_default</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_attributes_from_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="n">name</span>
@@ -1035,7 +1033,8 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_db_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">prepared</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return field&#39;s value prepared for interacting with the database backend.</span>
+<span class="sd">        Return field&#39;s value prepared for interacting with the database</span>
+<span class="sd">        backend.</span>
 
 <span class="sd">        Used by the default implementations of get_db_prep_save().</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1377,7 +1376,7 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_to_naive</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">timezone</span><span class="o">.</span><span class="n">is_aware</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">make_naive</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">make_naive</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 
@@ -1826,8 +1825,9 @@
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">validators</span> <span class="o">+</span> <span class="p">[</span>
-            <span class="n">validators</span><span class="o">.</span><span class="n">DecimalValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="o">*</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">validators</span><span class="p">,</span>
+            <span class="n">validators</span><span class="o">.</span><span class="n">DecimalValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span><span class="p">),</span>
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
@@ -1964,8 +1964,8 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">deconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">deconstruct</span><span class="p">()</span>
-        <span class="c1"># We do not exclude max_length if it matches default as we want to change</span>
-        <span class="c1"># the default in future.</span>
+        <span class="c1"># We do not exclude max_length if it matches default as we want to</span>
+        <span class="c1"># change the default in future.</span>
         <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">formfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

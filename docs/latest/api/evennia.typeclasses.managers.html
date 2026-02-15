@@ -490,6 +490,12 @@ path to an existing typeclass.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.typeclasses.managers.Attribute.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.typeclasses.managers.Attribute.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.typeclasses.managers.Attribute.accountdb_set">
 <span class="sig-name descname"><span class="pre">accountdb_set</span></span><a class="headerlink" href="#evennia.typeclasses.managers.Attribute.accountdb_set" title="Link to this definition">¶</a></dt>
@@ -818,7 +824,8 @@ added to the query.</p>
 in this query</p></li>
 <li><p><strong>reuse</strong> (<em>*</em>) – a set of reusable joins for multijoins</p></li>
 <li><p><strong>summarize</strong> (<em>*</em>) – a terminal aggregate clause</p></li>
-<li><p><strong>for_save</strong> (<em>*</em>) – whether this expression about to be used in a save or update</p></li>
+<li><p><strong>for_save</strong> (<em>*</em>) – whether this expression about to be used in a save or
+update</p></li>
 </ul>
 </dd>
 </dl>
@@ -1116,6 +1123,12 @@ default search functions of Evennia to allow quick searches by alias.</p>
 <dt class="sig sig-object py" id="evennia.typeclasses.managers.Tag.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.typeclasses.managers.Tag.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.typeclasses.managers.Tag.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.typeclasses.managers.Tag.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1621,6 +1634,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute"><code class="docutils literal notranslate"><span class="pre">Attribute</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Attribute.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Attribute.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Attribute.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.accountdb_set"><code class="docutils literal notranslate"><span class="pre">Attribute.accountdb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.attrtype"><code class="docutils literal notranslate"><span class="pre">Attribute.attrtype</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Attribute.category"><code class="docutils literal notranslate"><span class="pre">Attribute.category</span></code></a></li>
@@ -1722,6 +1736,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Tag.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Tag.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Tag.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.accountdb_set"><code class="docutils literal notranslate"><span class="pre">Tag.accountdb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.channeldb_set"><code class="docutils literal notranslate"><span class="pre">Tag.channeldb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.managers.Tag.db_category"><code class="docutils literal notranslate"><span class="pre">Tag.db_category</span></code></a></li>

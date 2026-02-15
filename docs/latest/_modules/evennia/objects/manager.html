@@ -44,6 +44,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">connection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Q</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.fields</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
 
@@ -103,6 +104,19 @@
     <span class="c1">#</span>
 
     <span class="c1"># account related</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_fuzzy_search_regex</span><span class="p">(</span><span class="n">ostring</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a backend-compatible regex for partial word-start matching.</span>
+
+<span class="sd">        PostgreSQL uses POSIX regex where `\\b` is not a word-boundary token.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">ostring</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;.*&quot;</span>
+        <span class="n">word_boundary</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\m&quot;</span> <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">vendor</span> <span class="o">==</span> <span class="s2">&quot;postgresql&quot;</span> <span class="k">else</span> <span class="sa">r</span><span class="s2">&quot;\b&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;.* &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">word_boundary</span><span class="si">}{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">word</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;.*&quot;</span>
 
 <div class="viewcode-block" id="ObjectDBManager.get_object_with_account">
 <a class="viewcode-back" href="../../../api/evennia.objects.manager.html#evennia.objects.manager.ObjectDBManager.get_object_with_account">[docs]</a>
@@ -386,7 +400,7 @@
             <span class="p">)</span>
 
         <span class="c1"># convert search term to partial-match regex</span>
-        <span class="n">search_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;.* &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b&quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">ostring</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;.*&quot;</span>
+        <span class="n">search_regex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_fuzzy_search_regex</span><span class="p">(</span><span class="n">ostring</span><span class="p">)</span>
 
         <span class="c1"># do the fuzzy search and return whatever it matches</span>
         <span class="k">return</span> <span class="p">(</span>

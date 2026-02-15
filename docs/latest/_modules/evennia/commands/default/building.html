@@ -44,11 +44,10 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">evennia</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.core.paginator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Paginator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Max</span><span class="p">,</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Q</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">evennia</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia</span><span class="w"> </span><span class="kn">import</span> <span class="n">InterruptCommand</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.commands.cmdhandler</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_cmdset_providers</span><span class="p">,</span> <span class="n">get_and_merge_cmdsets</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.locks.lockhandler</span><span class="w"> </span><span class="kn">import</span> <span class="n">LockException</span>
@@ -2033,12 +2032,21 @@
         <span class="n">nested</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">nested_keys</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_nested_attr</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
             <span class="n">nested</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_nested_lookup</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">*</span><span class="n">nested_keys</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_found</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attribute </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/|w</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">|n [category:</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attribute </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/|w</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> [category:</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] does not exist.&quot;</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">nested_keys</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span>
+                    <span class="n">deep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_nested_lookup</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">*</span><span class="n">nested_keys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">deep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_found</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">val</span> <span class="o">=</span> <span class="n">deep</span><span class="p">[</span><span class="n">nested_keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                            <span class="k">continue</span>
+                        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attribute </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/|w</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">|n [category:</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">val</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attribute </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/|w</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">|n [category:</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attribute </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/|w</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">|n [category:</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] does not exist.&quot;</span>
         <span class="k">if</span> <span class="n">nested</span><span class="p">:</span>
             <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot; (Nested lookups attempted)&quot;</span>
         <span class="k">return</span> <span class="n">error</span></div>
@@ -4618,23 +4626,23 @@
             <span class="c1"># treat as string</span>
             <span class="n">eval_err</span> <span class="o">=</span> <span class="n">err</span>
             <span class="n">prototype</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="c1"># it&#39;s possible that the input was a prototype-key, in which case</span>
-            <span class="c1"># it&#39;s okay for the LITERAL_EVAL to fail. Only if the result does not</span>
-            <span class="c1"># match the expected type do we have a problem.</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prototype</span><span class="p">,</span> <span class="n">expect</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">eval_err</span><span class="p">:</span>
-                    <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inp</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">eval_err</span><span class="si">}</span><span class="se">\n</span><span class="s2">|RCritical Python syntax error in argument. Only&quot;</span>
-                        <span class="s2">&quot; primitive Python structures are allowed. </span><span class="se">\n</span><span class="s2">Make sure to use correct&quot;</span>
-                        <span class="s2">&quot; Python syntax. Remember especially to put quotes around all strings&quot;</span>
-                        <span class="s2">&quot; inside lists and dicts.|n For more advanced uses, embed funcparser&quot;</span>
-                        <span class="s2">&quot; callables ($funcs) in the strings.&quot;</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">expect</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-                <span class="k">return</span>
+
+        <span class="c1"># validation - it&#39;s possible that the input was a prototype-key, in which case</span>
+        <span class="c1"># it&#39;s okay for the LITERAL_EVAL to fail. Only if the result does not</span>
+        <span class="c1"># match the expected type do we have a problem.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prototype</span><span class="p">,</span> <span class="n">expect</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">eval_err</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inp</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">eval_err</span><span class="si">}</span><span class="se">\n</span><span class="s2">|RCritical Python syntax error in argument. Only&quot;</span>
+                    <span class="s2">&quot; primitive Python structures are allowed. </span><span class="se">\n</span><span class="s2">Make sure to use correct&quot;</span>
+                    <span class="s2">&quot; Python syntax. Remember especially to put quotes around all strings&quot;</span>
+                    <span class="s2">&quot; inside lists and dicts.|n For more advanced uses, embed funcparser&quot;</span>
+                    <span class="s2">&quot; callables ($funcs) in the strings.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">expect</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">expect</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
             <span class="c1"># an actual prototype. We need to make sure it&#39;s safe,</span>

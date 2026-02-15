@@ -147,6 +147,12 @@ _SaverList, _SaverDict and _SaverSet counterparts.</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.utils.dbserialize.ContentType.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.utils.dbserialize.ContentType.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.utils.dbserialize.ContentType.app_label">
 <span class="sig-name descname"><span class="pre">app_label</span></span><a class="headerlink" href="#evennia.utils.dbserialize.ContentType.app_label" title="Link to this definition">¶</a></dt>
@@ -193,7 +199,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -236,7 +242,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 </dd></dl>
@@ -860,6 +866,7 @@ shortcut to having to use the full backend name.</p>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType"><code class="docutils literal notranslate"><span class="pre">ContentType</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ContentType.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ContentType.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ContentType.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.app_label"><code class="docutils literal notranslate"><span class="pre">ContentType.app_label</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.app_labeled_name"><code class="docutils literal notranslate"><span class="pre">ContentType.app_labeled_name</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.dbserialize.ContentType.get_all_objects_for_this_type"><code class="docutils literal notranslate"><span class="pre">ContentType.get_all_objects_for_this_type()</span></code></a></li>

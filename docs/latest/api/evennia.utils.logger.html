@@ -58,6 +58,20 @@ arbitrary files in $GAME_DIR/server/logs.</p>
 <p>Note: All logging functions have two aliases, log_type() and
 log_typemsg(). This is for historical, back-compatible reasons.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="evennia.utils.logger.mask_sensitive_input">
+<span class="sig-prename descclassname"><span class="pre">evennia.utils.logger.</span></span><span class="sig-name descname"><span class="pre">mask_sensitive_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evennia/utils/logger.html#mask_sensitive_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evennia.utils.logger.mask_sensitive_input" title="Link to this definition">¶</a></dt>
+<dd><p>Mask sensitive command arguments in a raw command string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Raw command line.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>str</em> – Same string, with sensitive segments replaced by <strong>*****</strong>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="evennia.utils.logger.log_info">
 <span class="sig-prename descclassname"><span class="pre">evennia.utils.logger.</span></span><span class="sig-name descname"><span class="pre">log_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evennia/utils/logger.html#log_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evennia.utils.logger.log_info" title="Link to this definition">¶</a></dt>
 <dd><p>Logs any generic debugging/informative info that should appear in the log.</p>
@@ -755,6 +769,7 @@ all if the file is shorter than nlines.</p>
 <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">evennia.utils.logger</a><ul>
+<li><a class="reference internal" href="#evennia.utils.logger.mask_sensitive_input"><code class="docutils literal notranslate"><span class="pre">mask_sensitive_input()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.logger.log_info"><code class="docutils literal notranslate"><span class="pre">log_info()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.logger.info"><code class="docutils literal notranslate"><span class="pre">info()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.utils.logger.log_infomsg"><code class="docutils literal notranslate"><span class="pre">log_infomsg()</span></code></a></li>

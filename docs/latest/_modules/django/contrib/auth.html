@@ -275,8 +275,12 @@
     <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">aset</span><span class="p">(</span><span class="n">SESSION_KEY</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk</span><span class="o">.</span><span class="n">value_to_string</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
     <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">aset</span><span class="p">(</span><span class="n">BACKEND_SESSION_KEY</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">aset</span><span class="p">(</span><span class="n">HASH_SESSION_KEY</span><span class="p">,</span> <span class="n">session_auth_hash</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">):</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;auser&quot;</span><span class="p">):</span>
+
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">auser</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">user</span>
+
+        <span class="n">request</span><span class="o">.</span><span class="n">auser</span> <span class="o">=</span> <span class="n">auser</span>
     <span class="n">rotate_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">user_logged_in</span><span class="o">.</span><span class="n">asend</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
 
@@ -306,14 +310,17 @@
     <span class="n">user</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;auser&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;is_authenticated&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;is_authenticated&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">await</span> <span class="n">user_logged_out</span><span class="o">.</span><span class="n">asend</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">aflush</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;auser&quot;</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnonymousUser</span>
 
-        <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">AnonymousUser</span><span class="p">()</span>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">auser</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">AnonymousUser</span><span class="p">()</span>
+
+        <span class="n">request</span><span class="o">.</span><span class="n">auser</span> <span class="o">=</span> <span class="n">auser</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_user_model</span><span class="p">():</span>
@@ -398,8 +405,8 @@
                     <span class="n">session_hash_verified</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">session_auth_hash</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">get_session_auth_hash</span><span class="p">()</span>
-                    <span class="n">session_hash_verified</span> <span class="o">=</span> <span class="n">session_hash</span> <span class="ow">and</span> <span class="n">constant_time_compare</span><span class="p">(</span>
-                        <span class="n">session_hash</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">get_session_auth_hash</span><span class="p">()</span>
+                    <span class="n">session_hash_verified</span> <span class="o">=</span> <span class="n">constant_time_compare</span><span class="p">(</span>
+                        <span class="n">session_hash</span><span class="p">,</span> <span class="n">session_auth_hash</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">session_hash_verified</span><span class="p">:</span>
                     <span class="c1"># If the current secret does not verify the session, try</span>
@@ -442,7 +449,7 @@
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">aupdate_session_auth_hash</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;See update_session_auth_hash().&quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">acycle_key</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;get_session_auth_hash&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="o">==</span> <span class="n">user</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;get_session_auth_hash&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">auser</span><span class="p">()</span> <span class="o">==</span> <span class="n">user</span><span class="p">:</span>
         <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">aset</span><span class="p">(</span><span class="n">HASH_SESSION_KEY</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">get_session_auth_hash</span><span class="p">())</span>
 </pre></div>
 

@@ -58,8 +58,8 @@
 <a class="viewcode-back" href="../../../api/evennia.accounts.accounts.html#evennia.accounts.accounts.import_string">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">import_string</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Import a dotted module path and return the attribute/class designated by the</span>
-<span class="sd">    last name in the path. Raise ImportError if the import failed.</span>
+<span class="sd">    Import a dotted module path and return the attribute/class designated by</span>
+<span class="sd">    the last name in the path. Raise ImportError if the import failed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">module_path</span><span class="p">,</span> <span class="n">class_name</span> <span class="o">=</span> <span class="n">dotted_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>

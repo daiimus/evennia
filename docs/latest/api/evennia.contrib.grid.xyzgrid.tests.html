@@ -459,19 +459,19 @@ character &#64;-symbol in that spot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_07">
 <span class="sig-name descname"><span class="pre">test_shortest_path_07</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_07" title="Link to this definition">¶</a></dt>
-<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 5), endcoord=(0, 0), expected_directions=(‘sw’, ‘nw’, ‘sw’, ‘s’, ‘s’, ‘sw’)].</p>
+<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 5), endcoord=(0, 0), expected_directions=(‘sw’, ‘nw’, ‘sw’, ‘se’, ‘sw’, ‘sw’)].</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_08">
 <span class="sig-name descname"><span class="pre">test_shortest_path_08</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_08" title="Link to this definition">¶</a></dt>
-<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 5), endcoord=(0, 0), expected_directions=(‘sw’, ‘nw’, ‘sw’, ‘s’, ‘s’, ‘sw’)].</p>
+<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 5), endcoord=(0, 0), expected_directions=(‘sw’, ‘nw’, ‘sw’, ‘se’, ‘sw’, ‘sw’)].</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_09">
 <span class="sig-name descname"><span class="pre">test_shortest_path_09</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestMap3.test_shortest_path_09" title="Link to this definition">¶</a></dt>
-<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 2), endcoord=(1, 2), expected_directions=(‘sw’, ‘nw’, ‘w’, ‘nw’, ‘s’)].</p>
+<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(5, 2), endcoord=(1, 2), expected_directions=(‘nw’, ‘n’, ‘nw’, ‘sw’, ‘s’)].</p>
 </dd></dl>
 
 <dl class="py method">
@@ -547,7 +547,7 @@ character &#64;-symbol in that spot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestMap4.test_shortest_path_5">
 <span class="sig-name descname"><span class="pre">test_shortest_path_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestMap4.test_shortest_path_5" title="Link to this definition">¶</a></dt>
-<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(2, 2), endcoord=(0, 4), expected_directions=(‘w’, ‘ne’, ‘nw’, ‘w’)].</p>
+<dd><p>Test shortest-path calculations throughout the grid [with startcoord=(2, 2), endcoord=(0, 4), expected_directions=(‘ne’, ‘w’, ‘nw’, ‘w’)].</p>
 </dd></dl>
 
 </dd></dl>
@@ -867,7 +867,7 @@ character &#64;-symbol in that spot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestMap8.test_shortest_path_6">
 <span class="sig-name descname"><span class="pre">test_shortest_path_6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestMap8.test_shortest_path_6" title="Link to this definition">¶</a></dt>
-<dd><p>test shortest-path calculations throughout the grid [with startcoord=(1, 4), endcoord=(3, 3), expected_directions=(‘e’, ‘w’, ‘e’)].</p>
+<dd><p>test shortest-path calculations throughout the grid [with startcoord=(1, 4), endcoord=(3, 3), expected_directions=(‘w’, ‘s’, ‘e’)].</p>
 </dd></dl>
 
 </dd></dl>
@@ -1355,6 +1355,12 @@ normal hook to overload for most object types.</p>
 <dd><p>Bases: <a class="reference internal" href="evennia.contrib.grid.xyzgrid.xyzroom.html#evennia.contrib.grid.xyzgrid.xyzroom.XYZRoom.MultipleObjectsReturned" title="evennia.contrib.grid.xyzgrid.xyzroom.XYZRoom.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="evennia.contrib.grid.xyzgrid.xyzroom.html#evennia.contrib.grid.xyzgrid.xyzroom.XYZRoom.NotUpdated" title="evennia.contrib.grid.xyzgrid.xyzroom.XYZRoom.NotUpdated"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotUpdated</span></code></a></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.path">
 <span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'evennia.contrib.grid.xyzgrid.tests.TestXyzRoom'</span></em><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.path" title="Link to this definition">¶</a></dt>
@@ -1388,6 +1394,12 @@ normal hook to overload for most object types.</p>
 <dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestXyzExit.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="evennia.contrib.grid.xyzgrid.xyzroom.html#evennia.contrib.grid.xyzgrid.xyzroom.XYZExit.MultipleObjectsReturned" title="evennia.contrib.grid.xyzgrid.xyzroom.XYZExit.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.contrib.grid.xyzgrid.tests.TestXyzExit.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="evennia.contrib.grid.xyzgrid.xyzroom.html#evennia.contrib.grid.xyzgrid.xyzroom.XYZExit.NotUpdated" title="evennia.contrib.grid.xyzgrid.xyzroom.XYZExit.NotUpdated"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotUpdated</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1798,6 +1810,7 @@ normal hook to overload for most object types.</p>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.at_object_creation"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.at_object_creation()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.NotUpdated"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.path"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.path</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzRoom.typename"><code class="docutils literal notranslate"><span class="pre">TestXyzRoom.typename</span></code></a></li>
 </ul>
@@ -1806,6 +1819,7 @@ normal hook to overload for most object types.</p>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.at_object_creation"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.at_object_creation()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.NotUpdated"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.path"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.path</span></code></a></li>
 <li><a class="reference internal" href="#evennia.contrib.grid.xyzgrid.tests.TestXyzExit.typename"><code class="docutils literal notranslate"><span class="pre">TestXyzExit.typename</span></code></a></li>
 </ul>

@@ -133,13 +133,19 @@
         <span class="c1"># We are using `or` statements below with dict.get() to avoid sending</span>
         <span class="c1"># stringified &#39;None&#39; values to the server.</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">long_description</span> <span class="o">=</span> <span class="n">egi_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;long_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">long_description</span><span class="p">:</span>
+                <span class="c1"># The connection wizard documents using &quot;\n&quot; for line breaks;</span>
+                <span class="c1"># normalize that to actual newlines before sending to EGI.</span>
+                <span class="n">long_description</span> <span class="o">=</span> <span class="n">long_description</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="n">values</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="c1"># Game listing stuff</span>
                 <span class="s2">&quot;game_name&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;game_name&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">SERVERNAME</span><span class="p">),</span>
                 <span class="s2">&quot;game_status&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="p">[</span><span class="s2">&quot;game_status&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;game_website&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;game_website&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
                 <span class="s2">&quot;short_description&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="p">[</span><span class="s2">&quot;short_description&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;long_description&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;long_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;long_description&quot;</span><span class="p">:</span> <span class="n">long_description</span><span class="p">,</span>
                 <span class="s2">&quot;listing_contact&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="p">[</span><span class="s2">&quot;listing_contact&quot;</span><span class="p">],</span>
                 <span class="c1"># How to play</span>
                 <span class="s2">&quot;telnet_hostname&quot;</span><span class="p">:</span> <span class="n">egi_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;telnet_hostname&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>

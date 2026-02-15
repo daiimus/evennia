@@ -153,6 +153,12 @@ object the first time, the query is executed.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.models.AccountDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.models.AccountDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.accounts.models.AccountDB.account_subscription_set">
 <span class="sig-name descname"><span class="pre">account_subscription_set</span></span><a class="headerlink" href="#evennia.accounts.models.AccountDB.account_subscription_set" title="Link to this definition">¶</a></dt>
@@ -368,7 +374,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -383,7 +389,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -426,7 +432,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -524,7 +530,8 @@ admin-compliant permissions.</p>
 <dd><p>Hook for doing any extra model-wide validation after clean() has been
 called on every field by self.clean_fields. Any ValidationError raised
 by this method will not be associated with a particular field; it will
-have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
+have a special-case association with the field defined by
+NON_FIELD_ERRORS.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1624,6 +1631,7 @@ codec.</p>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.uid"><code class="docutils literal notranslate"><span class="pre">AccountDB.uid</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">AccountDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">AccountDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.models.AccountDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">AccountDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.account_subscription_set"><code class="docutils literal notranslate"><span class="pre">AccountDB.account_subscription_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.date_joined"><code class="docutils literal notranslate"><span class="pre">AccountDB.date_joined</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.models.AccountDB.db_attributes"><code class="docutils literal notranslate"><span class="pre">AccountDB.db_attributes</span></code></a></li>

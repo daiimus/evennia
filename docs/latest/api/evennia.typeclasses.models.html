@@ -773,6 +773,12 @@ developer’s responsibility.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.typeclasses.models.Attribute.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.typeclasses.models.Attribute.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.typeclasses.models.Attribute.accountdb_set">
 <span class="sig-name descname"><span class="pre">accountdb_set</span></span><a class="headerlink" href="#evennia.typeclasses.models.Attribute.accountdb_set" title="Link to this definition">¶</a></dt>
@@ -1332,6 +1338,12 @@ bypassing this <strong>AttributeProperty</strong> entirely and this method is ne
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.typeclasses.models.ContentType.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.typeclasses.models.ContentType.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.typeclasses.models.ContentType.app_label">
 <span class="sig-name descname"><span class="pre">app_label</span></span><a class="headerlink" href="#evennia.typeclasses.models.ContentType.app_label" title="Link to this definition">¶</a></dt>
@@ -1378,7 +1390,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1421,7 +1433,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2191,6 +2203,12 @@ default search functions of Evennia to allow quick searches by alias.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.typeclasses.models.Tag.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.typeclasses.models.Tag.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.typeclasses.models.Tag.accountdb_set">
 <span class="sig-name descname"><span class="pre">accountdb_set</span></span><a class="headerlink" href="#evennia.typeclasses.models.Tag.accountdb_set" title="Link to this definition">¶</a></dt>
@@ -2848,6 +2866,7 @@ codec.</p>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute"><code class="docutils literal notranslate"><span class="pre">Attribute</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Attribute.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Attribute.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Attribute.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.accountdb_set"><code class="docutils literal notranslate"><span class="pre">Attribute.accountdb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.attrtype"><code class="docutils literal notranslate"><span class="pre">Attribute.attrtype</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Attribute.category"><code class="docutils literal notranslate"><span class="pre">Attribute.category</span></code></a></li>
@@ -2898,6 +2917,7 @@ codec.</p>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType"><code class="docutils literal notranslate"><span class="pre">ContentType</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ContentType.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ContentType.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ContentType.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.app_label"><code class="docutils literal notranslate"><span class="pre">ContentType.app_label</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.app_labeled_name"><code class="docutils literal notranslate"><span class="pre">ContentType.app_labeled_name</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.ContentType.get_all_objects_for_this_type"><code class="docutils literal notranslate"><span class="pre">ContentType.get_all_objects_for_this_type()</span></code></a></li>
@@ -2994,6 +3014,7 @@ codec.</p>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Tag.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Tag.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.typeclasses.models.Tag.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Tag.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag.accountdb_set"><code class="docutils literal notranslate"><span class="pre">Tag.accountdb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag.channeldb_set"><code class="docutils literal notranslate"><span class="pre">Tag.channeldb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.typeclasses.models.Tag.db_category"><code class="docutils literal notranslate"><span class="pre">Tag.db_category</span></code></a></li>

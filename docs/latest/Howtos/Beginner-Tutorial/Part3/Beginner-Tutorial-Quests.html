@@ -61,7 +61,7 @@
 <li><p>At suitable times the quest’s <em>progress</em> is checked. This could happen on a timer or when trying to ‘hand in’ the quest. When checking, the current ‘step’ is checked against its finish conditions. If ok, that step is closed and the next step is checked until it either hits a step that is not yet complete, or there are no more steps, in which case the entire quest is complete.</p></li>
 </ol>
 <aside class="sidebar">
-<p>An example implementation of quests is found under <code class="docutils literal notranslate"><span class="pre">evennia/contrib/tutorials</span></code>, in <a class="reference internal" href="../../../api/evennia.contrib.tutorials.evadventure.quests.html#evennia-contrib-tutorials-evadventure-quests"><span class="std std-ref">evadvanture/quests.py</span></a>.</p>
+<p>An example implementation of quests is found under <code class="docutils literal notranslate"><span class="pre">evennia/contrib/tutorials</span></code>, in <a class="reference internal" href="../../../api/evennia.contrib.tutorials.evadventure.quests.html#evennia-contrib-tutorials-evadventure-quests"><span class="std std-ref">evadventure/quests.py</span></a>.</p>
 </aside>
 <p>To represent quests in code, we need</p>
 <ul class="simple">
@@ -89,25 +89,25 @@
 <span class="linenos"> 8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span>
 <span class="hll"><span class="linenos"> 9</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span> <span class="o">=</span> <span class="p">{}</span>
 </span><span class="hll"><span class="linenos">10</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quests</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class="hll"><span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">()</span>
-</span><span class="linenos">12</span>
-<span class="linenos">13</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="hll"><span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span><span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">()</span>
+<span class="linenos">12</span>
+<span class="hll"><span class="linenos">13</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="hll"><span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
 </span><span class="hll"><span class="linenos">15</span>            <span class="bp">self</span><span class="o">.</span><span class="n">quest_storage_attribute_key</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos">16</span>            <span class="n">category</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">quest_storage_attribute_category</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos">17</span>            <span class="n">default</span><span class="o">=</span><span class="p">{},</span>
-</span><span class="hll"><span class="linenos">18</span>        <span class="p">)</span>
-</span><span class="linenos">19</span>        <span class="c1"># instantiate all quests</span>
-<span class="linenos">20</span>        <span class="k">for</span> <span class="n">quest_key</span><span class="p">,</span> <span class="n">quest_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="hll"><span class="linenos">21</span>            <span class="bp">self</span><span class="o">.</span><span class="n">quests</span><span class="p">[</span><span class="n">quest_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">quest_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
-</span><span class="linenos">22</span>
-<span class="linenos">23</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="hll"><span class="linenos">24</span>        <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+</span><span class="linenos">18</span>        <span class="p">)</span>
+<span class="linenos">19</span>        <span class="c1"># instantiate all quests</span>
+<span class="hll"><span class="linenos">20</span>        <span class="k">for</span> <span class="n">quest_key</span><span class="p">,</span> <span class="n">quest_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span class="linenos">21</span>            <span class="bp">self</span><span class="o">.</span><span class="n">quests</span><span class="p">[</span><span class="n">quest_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">quest_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">questhandler</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+<span class="linenos">22</span>
+<span class="hll"><span class="linenos">23</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="hll"><span class="linenos">24</span>        <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
 </span><span class="hll"><span class="linenos">25</span>            <span class="bp">self</span><span class="o">.</span><span class="n">quest_storage_attribute_key</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos">26</span>            <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span><span class="p">,</span>
 </span><span class="hll"><span class="linenos">27</span>            <span class="n">category</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">quest_storage_attribute_category</span><span class="p">,</span>
-</span><span class="hll"><span class="linenos">28</span>        <span class="p">)</span>
-</span><span class="linenos">29</span>    
+</span><span class="linenos">28</span>        <span class="p">)</span>
+<span class="linenos">29</span>    
 <span class="linenos">30</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quest_key</span><span class="p">):</span>
 <span class="linenos">31</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">quest_key</span><span class="p">)</span>
 <span class="linenos">32</span>
@@ -116,7 +116,7 @@
 <span class="linenos">35</span>
 <span class="linenos">36</span>    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quest_class</span><span class="p">):</span>
 <span class="linenos">37</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quest_classes</span><span class="p">[</span><span class="n">quest_class</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">quest_class</span>
-<span class="linenos">38</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quests</span><span class="p">[</span><span class="n">quest_class</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">quest_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
+<span class="linenos">38</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quests</span><span class="p">[</span><span class="n">quest_class</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">quest_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">questhandler</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 <span class="linenos">39</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_save</span><span class="p">()</span>
 <span class="linenos">40</span>
 <span class="linenos">41</span>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quest_key</span><span class="p">):</span>
@@ -221,46 +221,48 @@ Instead we store only the classes, instantiate those classes with the Character,
 <span class="hll"><span class="linenos"> 7</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;base-quest&quot;</span>
 </span><span class="linenos"> 8</span>    <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Base quest&quot;</span>
 <span class="linenos"> 9</span>    <span class="n">start_step</span> <span class="o">=</span> <span class="s2">&quot;start&quot;</span>
-<span class="linenos">10</span>    
-<span class="linenos">11</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quester</span><span class="p">):</span>
-<span class="hll"><span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quester</span> <span class="o">=</span> <span class="n">quester</span>
-</span><span class="hll"><span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">load_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-</span><span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;current_step&quot;</span><span class="p">)</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_step</span><span class="p">:</span>
-<span class="linenos">17</span>            <span class="bp">self</span><span class="o">.</span><span class="n">current_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_step</span>
-<span class="linenos">18</span>
-<span class="linenos">19</span>    <span class="k">def</span><span class="w"> </span><span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="linenos">20</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-<span class="linenos">21</span>        <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">save_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-<span class="linenos">22</span>
-<span class="linenos">23</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="linenos">24</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
-<span class="linenos">25</span>
-<span class="linenos">26</span>    <span class="k">def</span><span class="w"> </span><span class="nf">remove_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="linenos">27</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="linenos">28</span>        <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">save_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-<span class="linenos">29</span>    
-<span class="linenos">30</span>    <span class="nd">@property</span>
-<span class="linenos">31</span>    <span class="k">def</span><span class="w"> </span><span class="nf">questhandler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">32</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quester</span><span class="o">.</span><span class="n">quests</span>
-<span class="linenos">33</span>
-<span class="hll"><span class="linenos">34</span>    <span class="nd">@property</span>
-</span><span class="hll"><span class="linenos">35</span>    <span class="k">def</span><span class="w"> </span><span class="nf">current_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="hll"><span class="linenos">36</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span>
-</span><span class="linenos">37</span>
-<span class="linenos">38</span>    <span class="nd">@current_step</span><span class="o">.</span><span class="n">setter</span>
-<span class="linenos">39</span>    <span class="k">def</span><span class="w"> </span><span class="nf">current_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_name</span><span class="p">):</span>
-<span class="linenos">40</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span> <span class="o">=</span> <span class="n">step_name</span>
-<span class="linenos">41</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s2">&quot;current_step&quot;</span><span class="p">,</span> <span class="n">step_name</span><span class="p">)</span>
+<span class="hll"><span class="linenos">10</span>
+</span><span class="hll"><span class="linenos">11</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quester</span><span class="p">,</span> <span class="n">questhandler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span class="hll"><span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">quester</span> <span class="o">=</span> <span class="n">quester</span>
+</span><span class="hll"><span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_questhandler</span> <span class="o">=</span> <span class="n">questhandler</span>
+</span><span class="hll"><span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">load_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</span><span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;current_step&quot;</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="hll"><span class="linenos">17</span>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_step</span><span class="p">:</span>
+</span><span class="linenos">18</span>            <span class="bp">self</span><span class="o">.</span><span class="n">current_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_step</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="k">def</span><span class="w"> </span><span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="linenos">21</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+<span class="linenos">22</span>        <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">save_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="linenos">23</span>
+<span class="hll"><span class="linenos">24</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span class="linenos">25</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span>    <span class="k">def</span><span class="w"> </span><span class="nf">remove_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="linenos">28</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="linenos">29</span>        <span class="bp">self</span><span class="o">.</span><span class="n">questhandler</span><span class="o">.</span><span class="n">save_quest_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="linenos">30</span>    
+<span class="hll"><span class="linenos">31</span>    <span class="nd">@property</span>
+</span><span class="linenos">32</span>    <span class="k">def</span><span class="w"> </span><span class="nf">questhandler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">33</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_questhandler</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_questhandler</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">quester</span><span class="o">.</span><span class="n">quests</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span>    <span class="nd">@property</span>
+<span class="linenos">36</span>    <span class="k">def</span><span class="w"> </span><span class="nf">current_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">37</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="nd">@current_step</span><span class="o">.</span><span class="n">setter</span>
+<span class="linenos">40</span>    <span class="k">def</span><span class="w"> </span><span class="nf">current_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_name</span><span class="p">):</span>
+<span class="linenos">41</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_current_step</span> <span class="o">=</span> <span class="n">step_name</span>
+<span class="linenos">42</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="s2">&quot;current_step&quot;</span><span class="p">,</span> <span class="n">step_name</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><strong>Line 7</strong>: Each class must have a <code class="docutils literal notranslate"><span class="pre">.key</span></code> property unquely identifying the quest. We depend on this in the quest-handler.</p></li>
 <li><p><strong>Line 12</strong>: <code class="docutils literal notranslate"><span class="pre">quester</span></code> (the Character) is passed into this class when it is initiated inside <code class="docutils literal notranslate"><span class="pre">EvAdventureQuestHandler._load()</span></code>.</p></li>
-<li><p><strong>Line 13</strong>: We load the quest data into <code class="docutils literal notranslate"><span class="pre">self.data</span></code> directly using the <code class="docutils literal notranslate"><span class="pre">questhandler.load_quest-data</span></code> method (which in turn loads it from an Attribute on the Character). Note that the <code class="docutils literal notranslate"><span class="pre">.questhandler</span></code> property is defined on <strong>lines 34-36</strong> as a shortcut to get to the handler.</p></li>
+<li><p><strong>Line 13</strong>: The handler is also passed in during loading, so this quest instance can use it directly without triggering recursion during lazy loading.</p></li>
+<li><p><strong>Lines 17, 24 and 31</strong>: <code class="docutils literal notranslate"><span class="pre">add_data</span></code> and <code class="docutils literal notranslate"><span class="pre">remove_data</span></code> call back to <code class="docutils literal notranslate"><span class="pre">questhandler.save_quest_data</span></code> so persistence happens in one place.</p></li>
 </ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">add/get/remove_data</span></code> methods are convenient wrappers for getting data in and out of the database using the matching methods on the handler. When we implement a quest we should prefer to use <code class="docutils literal notranslate"><span class="pre">.get_data</span></code>, <code class="docutils literal notranslate"><span class="pre">add_data</span></code> and <code class="docutils literal notranslate"><span class="pre">remove_data</span></code> over manipulating <code class="docutils literal notranslate"><span class="pre">.data</span></code> directly, since the former will make sure to save said that to the database automatically.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">add/get/remove_data</span></code> methods are convenient wrappers for getting data in and out of the database. When we implement a quest we should prefer to use <code class="docutils literal notranslate"><span class="pre">.get_data</span></code>, <code class="docutils literal notranslate"><span class="pre">add_data</span></code> and <code class="docutils literal notranslate"><span class="pre">remove_data</span></code> over manipulating <code class="docutils literal notranslate"><span class="pre">.data</span></code> directly, since the former will make sure to save said that to the database automatically.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">current_step</span></code> tracks the current quest ‘step’ we are in; what this means is up to each Quest. We set up convenient properties for setting the <code class="docutils literal notranslate"><span class="pre">current_state</span></code> and also make sure to save it in the data dict as “current_step”.</p>
 <p>The quest can have a few possible statuses: “started”, “completed”, “abandoned” and “failed”. We create a few properties and methods for easily control that, while saving everything under the hood:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in evadventure/quests.py</span>

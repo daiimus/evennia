@@ -783,6 +783,12 @@ our liking.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.commands.default.system.AccountDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.commands.default.system.AccountDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.commands.default.system.AccountDB.account_subscription_set">
 <span class="sig-name descname"><span class="pre">account_subscription_set</span></span><a class="headerlink" href="#evennia.commands.default.system.AccountDB.account_subscription_set" title="Link to this definition">¶</a></dt>
@@ -1030,7 +1036,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1050,7 +1056,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1098,7 +1104,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2037,6 +2043,7 @@ values with double quotes.</p></li>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB"><code class="docutils literal notranslate"><span class="pre">AccountDB</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">AccountDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">AccountDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">AccountDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.account_subscription_set"><code class="docutils literal notranslate"><span class="pre">AccountDB.account_subscription_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.cmdset_storage"><code class="docutils literal notranslate"><span class="pre">AccountDB.cmdset_storage</span></code></a></li>
 <li><a class="reference internal" href="#evennia.commands.default.system.AccountDB.date_joined"><code class="docutils literal notranslate"><span class="pre">AccountDB.date_joined</span></code></a></li>

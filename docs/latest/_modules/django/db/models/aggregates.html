@@ -41,8 +41,17 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldError</span><span class="p">,</span> <span class="n">FullResultSet</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.expressions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">ColPairs</span><span class="p">,</span> <span class="n">Func</span><span class="p">,</span> <span class="n">Star</span><span class="p">,</span> <span class="n">Value</span><span class="p">,</span> <span class="n">When</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.fields</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegerField</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotSupportedError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.expressions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Case</span><span class="p">,</span>
+    <span class="n">ColPairs</span><span class="p">,</span>
+    <span class="n">Func</span><span class="p">,</span>
+    <span class="n">OrderByList</span><span class="p">,</span>
+    <span class="n">Star</span><span class="p">,</span>
+    <span class="n">Value</span><span class="p">,</span>
+    <span class="n">When</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.fields</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegerField</span><span class="p">,</span> <span class="n">TextField</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coalesce</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.functions.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">FixDurationInputMixin</span><span class="p">,</span>
@@ -51,47 +60,97 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;Aggregate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AnyValue&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Avg&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Count&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Max&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Min&quot;</span><span class="p">,</span>
     <span class="s2">&quot;StdDev&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StringAgg&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Sum&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Variance&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">AggregateFilter</span><span class="p">(</span><span class="n">Func</span><span class="p">):</span>
+    <span class="n">arity</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot; FILTER (WHERE </span><span class="si">%(expressions)s</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">supports_aggregate_filter_clause</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotSupportedError</span><span class="p">(</span>
+                <span class="s2">&quot;Aggregate filter clauses are not supported on this database backend.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">FullResultSet</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">condition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_joiner</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_expressions</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AggregateOrderBy</span><span class="p">(</span><span class="n">OrderByList</span><span class="p">):</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot; ORDER BY </span><span class="si">%(expressions)s</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">supports_aggregate_order_by_clause</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotSupportedError</span><span class="p">(</span>
+                <span class="s2">&quot;This database backend does not support specifying an order on &quot;</span>
+                <span class="s2">&quot;aggregates.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+
+
 <span class="k">class</span><span class="w"> </span><span class="nc">Aggregate</span><span class="p">(</span><span class="n">Func</span><span class="p">):</span>
-    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s</span><span class="s2">)&quot;</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s%(order_by)s</span><span class="s2">)</span><span class="si">%(filter)s</span><span class="s2">&quot;</span>
     <span class="n">contains_aggregate</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">filter_template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> FILTER (WHERE </span><span class="si">%%</span><span class="s2">(filter)s)&quot;</span>
     <span class="n">window_compatible</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">allow_distinct</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">allow_order_by</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">empty_result_set_value</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">expressions</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">expressions</span><span class="p">,</span>
+        <span class="n">distinct</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">distinct</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_distinct</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> does not allow distinct.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">order_by</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_order_by</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> does not allow order_by.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">empty_result_set_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not allow default.&quot;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span> <span class="o">=</span> <span class="n">distinct</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="nb">filter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">AggregateFilter</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="o">=</span> <span class="n">AggregateOrderBy</span><span class="o">.</span><span class="n">from_param</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.order_by&quot;</span><span class="p">,</span> <span class="n">order_by</span>
+        <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">expressions</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_source_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Don&#39;t return the filter expression since it&#39;s not a source field.</span>
+        <span class="c1"># Don&#39;t consider filter and order by expression as they have nothing</span>
+        <span class="c1"># to do with the output field resolution.</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">_output_field_or_none</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">()]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_source_expressions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">source_expressions</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">source_expressions</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">source_expressions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_source_expressions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exprs</span><span class="p">):</span>
-        <span class="o">*</span><span class="n">exprs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">exprs</span>
+        <span class="o">*</span><span class="n">exprs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="o">=</span> <span class="n">exprs</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_source_expressions</span><span class="p">(</span><span class="n">exprs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">resolve_expression</span><span class="p">(</span>
@@ -148,35 +207,45 @@
         <span class="k">return</span> <span class="p">[]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
-        <span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;distinct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DISTINCT &quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">supports_aggregate_filter_clause</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">filter_sql</span><span class="p">,</span> <span class="n">filter_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
-                <span class="k">except</span> <span class="n">FullResultSet</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_template</span> <span class="o">%</span> <span class="n">extra_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                        <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span>
-                    <span class="p">)</span>
-                    <span class="n">sql</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span>
-                        <span class="n">compiler</span><span class="p">,</span>
-                        <span class="n">connection</span><span class="p">,</span>
-                        <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span>
-                        <span class="nb">filter</span><span class="o">=</span><span class="n">filter_sql</span><span class="p">,</span>
-                        <span class="o">**</span><span class="n">extra_context</span><span class="p">,</span>
-                    <span class="p">)</span>
-                    <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">filter_params</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">supports_aggregate_distinct_multiple_argument</span>
+            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">NotSupportedError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not support distinct with multiple expressions on &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;this database backend.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">distinct_sql</span> <span class="o">=</span> <span class="s2">&quot;DISTINCT &quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">order_by_sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">order_by_params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filter_sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">filter_params</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">order_by</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">order_by_sql</span><span class="p">,</span> <span class="n">order_by_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">order_by</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">filter_sql</span><span class="p">,</span> <span class="n">filter_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">NotSupportedError</span><span class="p">:</span>
+                <span class="c1"># Fallback to a CASE statement on backends that don&#39;t support</span>
+                <span class="c1"># the FILTER clause.</span>
                 <span class="n">copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">copy</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">source_expressions</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">()</span>
-                <span class="n">condition</span> <span class="o">=</span> <span class="n">When</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">condition</span> <span class="o">=</span> <span class="n">When</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">copy</span><span class="o">.</span><span class="n">set_source_expressions</span><span class="p">([</span><span class="n">Case</span><span class="p">(</span><span class="n">condition</span><span class="p">)]</span> <span class="o">+</span> <span class="n">source_expressions</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Aggregate</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span>
-                    <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span>
-                <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+
+        <span class="n">extra_context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">distinct</span><span class="o">=</span><span class="n">distinct_sql</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="n">filter_sql</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="o">=</span><span class="n">order_by_sql</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sql</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">order_by_params</span><span class="p">,</span> <span class="o">*</span><span class="n">filter_params</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_repr_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">options</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_get_repr_options</span><span class="p">()</span>
@@ -184,7 +253,23 @@
             <span class="n">options</span><span class="p">[</span><span class="s2">&quot;distinct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">:</span>
             <span class="n">options</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;order_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span>
         <span class="k">return</span> <span class="n">options</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AnyValue</span><span class="p">(</span><span class="n">Aggregate</span><span class="p">):</span>
+    <span class="n">function</span> <span class="o">=</span> <span class="s2">&quot;ANY_VALUE&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;AnyValue&quot;</span>
+    <span class="n">arity</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">window_compatible</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">supports_any_value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotSupportedError</span><span class="p">(</span>
+                <span class="s2">&quot;ANY_VALUE is not supported on this database backend.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Avg</span><span class="p">(</span><span class="n">FixDurationInputMixin</span><span class="p">,</span> <span class="n">NumericOutputFieldMixin</span><span class="p">,</span> <span class="n">Aggregate</span><span class="p">):</span>
@@ -219,17 +304,17 @@
 <a class="viewcode-back" href="../../../../api/evennia.typeclasses.managers.html#evennia.commands.default.building.Count.resolve_expression">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">resolve_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resolve_expression</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">expr</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">source_expressions</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">()</span>
 
         <span class="c1"># In case of composite primary keys, count the first column.</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">ColPairs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span> <span class="o">:=</span> <span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ColPairs</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;COUNT(DISTINCT) doesn&#39;t support composite primary keys&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">cols</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">get_cols</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">Count</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">filter</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+            <span class="n">source_expressions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">get_cols</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">set_source_expressions</span><span class="p">(</span><span class="n">source_expressions</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 </div>
@@ -264,6 +349,88 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_repr_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_get_repr_options</span><span class="p">(),</span> <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;STDDEV_SAMP&quot;</span><span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">StringAggDelimiter</span><span class="p">(</span><span class="n">Func</span><span class="p">):</span>
+    <span class="n">arity</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(expressions)s</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_mysql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot; SEPARATOR </span><span class="si">%(expressions)s</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span>
+            <span class="n">compiler</span><span class="p">,</span>
+            <span class="n">connection</span><span class="p">,</span>
+            <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">extra_context</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">StringAgg</span><span class="p">(</span><span class="n">Aggregate</span><span class="p">):</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s%(order_by)s</span><span class="s2">)</span><span class="si">%(filter)s</span><span class="s2">&quot;</span>
+    <span class="n">function</span> <span class="o">=</span> <span class="s2">&quot;STRING_AGG&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;StringAgg&quot;</span>
+    <span class="n">allow_distinct</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">allow_order_by</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">output_field</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span> <span class="o">=</span> <span class="n">StringAggDelimiter</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_oracle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s</span><span class="s2">) WITHIN GROUP (</span><span class="si">%(order_by)s</span><span class="s2">)&quot;</span>
+                <span class="s2">&quot;</span><span class="si">%(filter)s</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s</span><span class="s2">)</span><span class="si">%(filter)s</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span>
+            <span class="n">compiler</span><span class="p">,</span>
+            <span class="n">connection</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s2">&quot;LISTAGG&quot;</span><span class="p">,</span>
+            <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">extra_context</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_mysql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GROUP_CONCAT&quot;</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(function)s</span><span class="s2">(</span><span class="si">%(distinct)s%(expressions)s%(order_by)s%(delimiter)s</span><span class="s2">)&quot;</span>
+        <span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">template</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># The creation of the delimiter SQL and the ordering of the parameters</span>
+        <span class="c1"># must be handled explicitly, as MySQL puts the delimiter at the end of</span>
+        <span class="c1"># the aggregate using the `SEPARATOR` declaration (rather than treating</span>
+        <span class="c1"># as an expression like other database backends).</span>
+        <span class="n">delimiter_params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">delimiter</span><span class="p">:</span>
+            <span class="n">delimiter_sql</span><span class="p">,</span> <span class="n">delimiter_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">delimiter</span><span class="p">)</span>
+            <span class="c1"># Drop the delimiter from the source expressions.</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">source_expressions</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">source_expressions</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;delimiter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">delimiter_sql</span>
+
+        <span class="n">sql</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">delimiter_params</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_sqlite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">get_database_version</span><span class="p">()</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">44</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span>
+                <span class="n">compiler</span><span class="p">,</span>
+                <span class="n">connection</span><span class="p">,</span>
+                <span class="n">function</span><span class="o">=</span><span class="s2">&quot;GROUP_CONCAT&quot;</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">extra_context</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_sql</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_context</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Sum</span><span class="p">(</span><span class="n">FixDurationInputMixin</span><span class="p">,</span> <span class="n">Aggregate</span><span class="p">):</span>

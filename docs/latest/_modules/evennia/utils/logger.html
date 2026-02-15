@@ -53,10 +53,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">traceback</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_exc</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">twisted</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span> <span class="k">as</span> <span class="n">twisted_logger</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">twisted.internet.threads</span><span class="w"> </span><span class="kn">import</span> <span class="n">deferToThread</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">twisted.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">logfile</span>
@@ -70,6 +72,74 @@
 <span class="n">_CHANNEL_LOG_NUM_TAIL_LINES</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">_TIME_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+
+
+<span class="n">_SENSITIVE_INPUT_PATTERNS</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_SENSITIVE_INPUT_PATTERNS_SIGNATURE</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compile_sensitive_input_patterns</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile masking regexes from settings.AUDIT_MASKS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;AUDIT_MASKS&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">masks</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
+        <span class="c1"># auditing format is list[dict[label -&gt; regex]], but we also</span>
+        <span class="c1"># support plain regex strings as a convenience.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">regexes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">re</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">log_err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid AUDIT_MASKS regex &#39;</span><span class="si">{</span><span class="n">regex</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">signature</span>
+
+
+<div class="viewcode-block" id="mask_sensitive_input">
+<a class="viewcode-back" href="../../../api/evennia.utils.logger.html#evennia.commands.default.comms.mask_sensitive_input">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mask_sensitive_input</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mask sensitive command arguments in a raw command string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg (str): Raw command line.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Same string, with sensitive segments replaced by ``*``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_SENSITIVE_INPUT_PATTERNS</span><span class="p">,</span> <span class="n">_SENSITIVE_INPUT_PATTERNS_SIGNATURE</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="k">if</span> <span class="n">_SENSITIVE_INPUT_PATTERNS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_SENSITIVE_INPUT_PATTERNS</span><span class="p">,</span> <span class="n">_SENSITIVE_INPUT_PATTERNS_SIGNATURE</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">_compile_sensitive_input_patterns</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">current_signature</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;AUDIT_MASKS&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">if</span> <span class="n">current_signature</span> <span class="o">!=</span> <span class="n">_SENSITIVE_INPUT_PATTERNS_SIGNATURE</span><span class="p">:</span>
+            <span class="n">_SENSITIVE_INPUT_PATTERNS</span><span class="p">,</span> <span class="n">_SENSITIVE_INPUT_PATTERNS_SIGNATURE</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">_compile_sensitive_input_patterns</span><span class="p">()</span>
+            <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">_SENSITIVE_INPUT_PATTERNS</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;secret&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern</span><span class="o">.</span><span class="n">groupindex</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+            <span class="c1"># Keep rough size information while still obscuring short secrets.</span>
+            <span class="n">masked</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">msg</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span><span class="si">}{</span><span class="n">masked</span><span class="si">}{</span><span class="n">msg</span><span class="p">[</span><span class="n">end</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">msg</span></div>
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">logfunc</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

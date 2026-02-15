@@ -755,6 +755,10 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">log_trace</span><span class="p">(</span><span class="n">_TRACE_PERSISTENT_SAVING</span><span class="p">)</span>
                 <span class="n">persistent</span> <span class="o">=</span> <span class="kc">False</span>
 
+        <span class="c1"># Make sure to not stack menu cmdsets across reload-restore cycles.</span>
+        <span class="c1"># On reload, ndb is cleared so we can&#39;t always close an old menu cleanly first.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">EvMenuCmdSet</span><span class="p">)</span>
+
         <span class="c1"># set up the menu command on the caller</span>
         <span class="n">menu_cmdset</span> <span class="o">=</span> <span class="n">EvMenuCmdSet</span><span class="p">()</span>
         <span class="n">menu_cmdset</span><span class="o">.</span><span class="n">mergetype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmdset_mergetype</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;Replace&quot;</span>
@@ -1756,17 +1760,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">key</span> <span class="o">=</span> <span class="n">_CMD_NOINPUT</span>
-    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[</span><span class="n">_CMD_NOMATCH</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;abort&quot;</span><span class="p">]</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[</span><span class="n">_CMD_NOMATCH</span><span class="p">]</span>
     <span class="n">arg_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^$&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">):</span>
-        <span class="k">del</span> <span class="n">caller</span><span class="o">.</span><span class="n">ndb</span><span class="o">.</span><span class="n">_yes_no_question</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inherits_from</span><span class="p">(</span>
-            <span class="n">caller</span><span class="p">,</span> <span class="n">evennia</span><span class="o">.</span><span class="n">DefaultObject</span>
-        <span class="p">):</span>
-            <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">caller</span><span class="o">.</span><span class="n">ndb</span><span class="p">,</span> <span class="s2">&quot;_yes_no_question&quot;</span><span class="p">):</span>
+            <span class="k">del</span> <span class="n">caller</span><span class="o">.</span><span class="n">ndb</span><span class="o">.</span><span class="n">_yes_no_question</span>
+        <span class="k">while</span> <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">):</span>
             <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inherits_from</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">evennia</span><span class="o">.</span><span class="n">DefaultObject</span><span class="p">)</span> <span class="ow">and</span> <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">ndb</span><span class="p">,</span> <span class="s2">&quot;_yes_no_question&quot;</span><span class="p">):</span>
+                <span class="k">del</span> <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">ndb</span><span class="o">.</span><span class="n">_yes_no_question</span>
+            <span class="k">while</span> <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">):</span>
+                <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CmdYesNoQuestion.func">
 <a class="viewcode-back" href="../../../api/evennia.utils.evmenu.html#evennia.commands.default.comms.CmdYesNoQuestion.func">[docs]</a>
@@ -1785,13 +1791,16 @@
 
             <span class="n">inp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmdname</span>
 
-            <span class="k">if</span> <span class="n">inp</span> <span class="o">==</span> <span class="n">_CMD_NOINPUT</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inp</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_CMD_NOINPUT</span><span class="p">,</span> <span class="n">_CMD_NOMATCH</span><span class="p">):</span>
                 <span class="n">raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_cmdname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">raw</span><span class="p">:</span>
                     <span class="c1"># use default</span>
                     <span class="n">inp</span> <span class="o">=</span> <span class="n">yes_no_question</span><span class="o">.</span><span class="n">default</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">inp</span> <span class="o">=</span> <span class="n">raw</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">inp</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">inp</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;abort&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">yes_no_question</span><span class="o">.</span><span class="n">allow_abort</span><span class="p">:</span>
                 <span class="n">caller</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Aborted.&quot;</span><span class="p">))</span>
@@ -1950,7 +1959,14 @@
     <span class="n">caller</span><span class="o">.</span><span class="n">ndb</span><span class="o">.</span><span class="n">_yes_no_question</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
     <span class="n">caller</span><span class="o">.</span><span class="n">ndb</span><span class="o">.</span><span class="n">_yes_no_question</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
 
-    <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
+    <span class="c1"># Avoid duplicate yes/no cmdsets across account/object command merges.</span>
+    <span class="k">while</span> <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">):</span>
+        <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inherits_from</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">evennia</span><span class="o">.</span><span class="n">DefaultObject</span><span class="p">)</span> <span class="ow">and</span> <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">):</span>
+            <span class="n">caller</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">)</span>
+
+    <span class="n">caller</span><span class="o">.</span><span class="n">cmdset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">YesNoQuestionCmdSet</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">caller</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span></div>
 
 

@@ -164,10 +164,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">handle_endtag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">void_elements</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="k">pass</span>
+            <span class="c1"># Remove from the stack only if the tag matches the most recently</span>
+            <span class="c1"># opened tag (LIFO). This avoids O(n) linear scans for unmatched</span>
+            <span class="c1"># end tags if `deque.remove()` would be called.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">tag</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">data</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -424,6 +425,22 @@
         <span class="c1"># Output headers...</span>
         <span class="k">yield</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+            <span class="n">zfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">data</span>
+    <span class="k">yield</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">acompress_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_random_bytes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">StreamingBuffer</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">_get_random_filename</span><span class="p">(</span><span class="n">max_random_bytes</span><span class="p">)</span> <span class="k">if</span> <span class="n">max_random_bytes</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">with</span> <span class="n">GzipFile</span><span class="p">(</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wb&quot;</span><span class="p">,</span> <span class="n">compresslevel</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">mtime</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">zfile</span><span class="p">:</span>
+        <span class="c1"># Output headers...</span>
+        <span class="k">yield</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
             <span class="n">zfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">:</span>

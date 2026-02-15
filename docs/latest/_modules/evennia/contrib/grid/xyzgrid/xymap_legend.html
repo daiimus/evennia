@@ -1070,16 +1070,14 @@
 <span class="sd">                &#39;pointing to an empty space&#39; error we&#39;d get if returning `None`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">xygrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xymap</span><span class="o">.</span><span class="n">xygrid</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paired_teleporter</span><span class="p">:</span>
-            <span class="c1"># scan for another teleporter</span>
-            <span class="n">symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span>
-            <span class="n">found_teleporters</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">iy</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">xygrid</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">node_or_link</span> <span class="ow">in</span> <span class="n">xygrid</span><span class="p">[</span><span class="n">iy</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">node_or_link</span><span class="o">.</span><span class="n">symbol</span> <span class="o">==</span> <span class="n">symbol</span> <span class="ow">and</span> <span class="n">node_or_link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
-                        <span class="n">found_teleporters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_or_link</span><span class="p">)</span>
-
+            <span class="c1"># find the matching teleporter via pre-built symbol map</span>
+            <span class="n">found_teleporters</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">comp</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">xymap</span><span class="o">.</span><span class="n">symbol_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span>
+            <span class="p">]</span>
+            
             <span class="k">if</span> <span class="ow">not</span> <span class="n">found_teleporters</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">MapParserError</span><span class="p">(</span><span class="s2">&quot;found no matching teleporter to link to.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">found_teleporters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>

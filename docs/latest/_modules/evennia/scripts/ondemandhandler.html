@@ -101,6 +101,8 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.server.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evennia.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_iter</span>
@@ -477,10 +479,25 @@
 <span class="sd">        Save the on-demand timers to ServerConfig storage. Should be called when Evennia shuts down.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cleaned_tasks</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">category</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="c1"># in case an object was used for categories, and were since deleted, drop the task</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">category</span><span class="o">.</span><span class="n">id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log_trace</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Error saving on-demand task </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">] (purging task): </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">cleaned_tasks</span><span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">category</span><span class="p">)]</span> <span class="o">=</span> <span class="n">task</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="n">cleaned_tasks</span>
         <span class="n">ServerConfig</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">conf</span><span class="p">(</span><span class="n">ONDEMAND_HANDLER_SAVE_NAME</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span></div>
 
 

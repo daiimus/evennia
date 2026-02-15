@@ -2260,6 +2260,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
             <span class="n">building</span><span class="o">.</span><span class="n">CmdSpawn</span><span class="p">(),</span> <span class="s2">&quot;/examine NO_EXISTS&quot;</span><span class="p">,</span> <span class="s2">&quot;No prototype named &#39;NO_EXISTS&#39; was found.&quot;</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestBuilding.test_setattr_view_with_category">
+<a class="viewcode-back" href="../../../../api/evennia.commands.default.tests.html#evennia.commands.default.tests.TestBuilding.test_setattr_view_with_category">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_setattr_view_with_category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test checking attributes with a category, including nested attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+            <span class="n">building</span><span class="o">.</span><span class="n">CmdSetAttribute</span><span class="p">(),</span>
+            <span class="s2">&quot;Obj/test:cat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Attribute Obj/test [category:cat] = value&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nested dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;testdict&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">},</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+            <span class="n">building</span><span class="o">.</span><span class="n">CmdSetAttribute</span><span class="p">(),</span>
+            <span class="s2">&quot;Obj/testdict[&#39;key&#39;]:cat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Attribute Obj/testdict[&#39;key&#39;] [category:cat] = value&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
 </div>
 
 

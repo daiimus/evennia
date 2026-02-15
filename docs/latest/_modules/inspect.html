@@ -503,6 +503,8 @@
 <span class="sd">        gi_frame        frame object or possibly None once the generator has</span>
 <span class="sd">                        been exhausted</span>
 <span class="sd">        gi_running      set to 1 when generator is executing, 0 otherwise</span>
+<span class="sd">        gi_suspended    set to 1 when the generator is suspended at a yield point, 0 otherwise</span>
+<span class="sd">        gi_yieldfrom    object being iterated by yield from or None</span>
 <span class="sd">        next            return the next item from the container</span>
 <span class="sd">        send            resumes the generator and &quot;sends&quot; a value that becomes</span>
 <span class="sd">                        the result of the current yield-expression</span>

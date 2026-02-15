@@ -49,10 +49,15 @@
 <section id="main-branch">
 <h2>Main branch<a class="headerlink" href="#main-branch" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Security dependency updates: Django &gt;5.2.8 (&lt;5.3), Django RestFramework 3.16</p></li>
-<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3599">Feat</a>: Make at_pre_cmd</p></li>
+<li><p>Feat (backwards incompatble): Drop Python 3.11 support (supported: Python 3.12, 3.13, 3.14 (req)). (Griatch)</p></li>
+<li><p>Security: Django &gt;=6.0.2 (&lt;6.1), Django RestFramework 3.16 (Griatch)</p></li>
+<li><p>Update: <code class="docutils literal notranslate"><span class="pre">XYZGrid</span></code> contrib now requires scipy 1.15-&gt;1.17. Note: Pathfinding may pick different
+shortest routes from before, due to private changes in scipy Dijkstra algorithm (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3599">Feat</a>: Make <code class="docutils literal notranslate"><span class="pre">at_pre_cmd</span></code> testable in unit tests (blongden)</p></li>
 <li><p>[Fix]: API /openapi/setattribute endpoints were both POST and PUT, causing schema
 errors; now changed to PUT only. (Griatch)</p></li>
+<li><p>[Feat][issue2627]: Add <code class="docutils literal notranslate"><span class="pre">settings.AUDIT_MASKS</span></code> to customize what Evennia should
+obfuscate in server error logs (such as passwords from custom login commands) (Griatch)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3799">Fix</a>: Fix typo in <code class="docutils literal notranslate"><span class="pre">basic_tc.py</span></code> contrib for beginner tutorial (Tharic99)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3806">Fix</a>: EvMore wouldn’t pass Session to next cmd when exiting (gas-public-wooden-clean)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3809">Fix</a>: Admin page - Repair link to Account button (UserlandAlchemist)</p></li>
@@ -72,6 +77,25 @@ removed in py3.12 for new installs (count-infinity)</p></li>
 ANSIString after reset (speeds up EvForm other string ops, fixes compatibility) (count-infinity)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3853">Fix</a>: Properly handle multimatch separations with native dashes, like
 ‘t-shirt-1’ (count-infinity)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3853">Fix</a>: Allow <code class="docutils literal notranslate"><span class="pre">CmdSetAttribute</span></code> to use categery, view dicts by key (InspectorCaracal)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3858">Fix</a>: Fix parsing issues in dice contrib (Griatch)</p></li>
+<li><p>Fix: <code class="docutils literal notranslate"><span class="pre">Typeclass.objects.get_by_tag()</span></code> will now always convert tag keys/categories to integers, to
+avoid inconsistencies with PostgreSQL databases (Griatch)</p></li>
+<li><p>[Fix][issue3513]: Fixed issue where OnDemandHandler could traceback on an
+un-pickle-able object and cause an error at server shutdown (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3649">Fix</a>: The <code class="docutils literal notranslate"><span class="pre">:j</span></code> command in EvEditor would squash empty lines (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3560">Fix</a>: Tutorial QuestHandler failed to load after server restart (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3601">Fix</a>: <code class="docutils literal notranslate"><span class="pre">CmdSet.add(...,</span> <span class="pre">allow_duplicates=True)</span></code> didn’t allow duplicate cmd keys (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3194">Fix</a>: Make filtering on AttributeProperties consistent across typeclasses (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/2774">Fix</a>: Properly support <code class="docutils literal notranslate"><span class="pre">\n</span></code> in <code class="docutils literal notranslate"><span class="pre">evennia</span> <span class="pre">connections</span></code> long descriptions (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3312">Fix</a>: Handle all edge cases breaking <code class="docutils literal notranslate"><span class="pre">monitor/monitored</span></code> <code class="docutils literal notranslate"><span class="pre">input_funcs</span></code> (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3154">Fix</a>: Persistent EvMenu caused multiple cmdsets on reload (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3193">Fix</a>: Formatting of inner nested evtable would break (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3082">Fix</a>: MXP linking broke EvTable formatting (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/issues/3693">Fix</a>: Using <code class="docutils literal notranslate"><span class="pre">|/</span></code> in EvTable broke padding (Griatch)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3864">Fix</a>: Correctly use cached dijkstra results for XYZGrid (jaborsh)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3863">Fix</a>: <code class="docutils literal notranslate"><span class="pre">XYZGrid</span></code> performance improvement in teleporter search (jaborsh)</p></li>
+<li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3862">Fix</a>: <code class="docutils literal notranslate"><span class="pre">TraitHandler</span></code> typo/bug fixes  (jaborsh)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3801">Doc</a>: Move Evennia doc build system to latest Sphinx/myST
 (PowershellNinja, also honorary mention to electroglyph)</p></li>
 <li><p><a class="reference external" href="https://github.com/evennia/evennia/pull/3800">Doc</a>: Describe support for Telnet SSH in HAProxy documentation (holl0wstar)</p></li>

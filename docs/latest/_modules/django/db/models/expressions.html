@@ -327,7 +327,8 @@
 <span class="sd">           in this query</span>
 <span class="sd">         * reuse: a set of reusable joins for multijoins</span>
 <span class="sd">         * summarize: a terminal aggregate clause</span>
-<span class="sd">         * for_save: whether this expression about to be used in a save or update</span>
+<span class="sd">         * for_save: whether this expression about to be used in a save or</span>
+<span class="sd">           update</span>
 
 <span class="sd">        Return: an Expression to be added to the query.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -387,9 +388,9 @@
 <span class="sd">        As a guess, if the output fields of all source fields match then simply</span>
 <span class="sd">        infer the same type here.</span>
 
-<span class="sd">        If a source&#39;s output field resolves to None, exclude it from this check.</span>
-<span class="sd">        If all sources are None, then an error is raised higher up the stack in</span>
-<span class="sd">        the output_field property.</span>
+<span class="sd">        If a source&#39;s output field resolves to None, exclude it from this</span>
+<span class="sd">        check. If all sources are None, then an error is raised higher up the</span>
+<span class="sd">        stack in the output_field property.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This guess is mostly a bad idea, but there is quite a lot of code</span>
         <span class="c1"># (especially 3rd party Func subclasses) that depend on it, we&#39;d need a</span>
@@ -538,7 +539,8 @@
         <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">params</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_expression_for_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Ignore expressions that cannot be used during a constraint validation.</span>
+        <span class="c1"># Ignore expressions that cannot be used during a constraint</span>
+        <span class="c1"># validation.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;constraint_validation_compatible&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="p">(</span><span class="n">expression</span><span class="p">,)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source_expressions</span><span class="p">()</span>
@@ -1184,7 +1186,7 @@
         <span class="n">template</span> <span class="o">=</span> <span class="n">template</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">)</span>
         <span class="n">arg_joiner</span> <span class="o">=</span> <span class="n">arg_joiner</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arg_joiner&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_joiner</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;expressions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg_joiner</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sql_parts</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">template</span> <span class="o">%</span> <span class="n">data</span><span class="p">,</span> <span class="n">params</span>
+        <span class="k">return</span> <span class="n">template</span> <span class="o">%</span> <span class="n">data</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">copy</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1323,7 +1325,8 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DatabaseDefault</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Expression to use DEFAULT keyword during insert otherwise the underlying expression.</span>
+<span class="sd">    Expression to use DEFAULT keyword during insert otherwise the underlying</span>
+<span class="sd">    expression.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="n">output_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1379,7 +1382,7 @@
         <span class="n">alias</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">column</span>
         <span class="n">identifiers</span> <span class="o">=</span> <span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span> <span class="k">if</span> <span class="n">alias</span> <span class="k">else</span> <span class="p">(</span><span class="n">column</span><span class="p">,)</span>
         <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">compiler</span><span class="o">.</span><span class="n">quote_name_unless_alias</span><span class="p">,</span> <span class="n">identifiers</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">relabeled_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relabels</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1540,6 +1543,21 @@
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">expressions</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_param</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">param</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">param</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s2">&quot;resolve_expression&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2"> must be either a string reference to a &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;field, an expression, or a list or tuple of them not </span><span class="si">{</span><span class="n">param</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
 
 <div class="viewcode-block" id="ExpressionWrapper">
 <a class="viewcode-back" href="../../../../api/evennia.typeclasses.managers.html#evennia.typeclasses.managers.ExpressionWrapper">[docs]</a>
@@ -1687,7 +1705,8 @@
     <span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resolve_expression</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">allow_joins</span><span class="p">,</span> <span class="n">reuse</span><span class="p">,</span> <span class="n">summarize</span><span class="p">,</span> <span class="n">for_save</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">for_save</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># Resolve condition with for_save=False, since it&#39;s used as a filter.</span>
+            <span class="c1"># Resolve condition with for_save=False, since it&#39;s used as a</span>
+            <span class="c1"># filter.</span>
             <span class="n">c</span><span class="o">.</span><span class="n">condition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">resolve_expression</span><span class="p">(</span>
                 <span class="n">query</span><span class="p">,</span> <span class="n">allow_joins</span><span class="p">,</span> <span class="n">reuse</span><span class="p">,</span> <span class="n">summarize</span><span class="p">,</span> <span class="n">for_save</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
@@ -1759,7 +1778,7 @@
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_source_expressions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_source_expressions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exprs</span><span class="p">):</span>
         <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">exprs</span>
@@ -1784,14 +1803,24 @@
             <span class="k">except</span> <span class="n">EmptyResultSet</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">except</span> <span class="n">FullResultSet</span><span class="p">:</span>
-                <span class="n">default_sql</span><span class="p">,</span> <span class="n">default_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+                <span class="n">default</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">result</span>
                 <span class="k">break</span>
             <span class="n">case_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">case_sql</span><span class="p">)</span>
             <span class="n">sql_params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">case_params</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">default_sql</span><span class="p">,</span> <span class="n">default_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">case_parts</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">default_sql</span><span class="p">,</span> <span class="n">default_params</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span>
+        <span class="k">if</span> <span class="n">case_parts</span><span class="p">:</span>
+            <span class="n">default_sql</span><span class="p">,</span> <span class="n">default_params</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">output_field</span> <span class="o">:=</span> <span class="n">default</span><span class="o">.</span><span class="n">_output_field_or_none</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cast</span>
+
+                <span class="n">default</span> <span class="o">=</span> <span class="n">Cast</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">output_field</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+
         <span class="n">case_joiner</span> <span class="o">=</span> <span class="n">case_joiner</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">case_joiner</span>
         <span class="n">template_params</span><span class="p">[</span><span class="s2">&quot;cases&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">case_joiner</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">case_parts</span><span class="p">)</span>
         <span class="n">template_params</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_sql</span>
@@ -1829,6 +1858,7 @@
         <span class="c1"># Allow the usage of both QuerySet and sql.Query objects.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="n">queryset</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">subquery</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">output_field</span><span class="p">)</span>
 
@@ -1840,6 +1870,23 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_output_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">output_field</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">resolved</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resolve_expression</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Subquery</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">==</span> <span class="n">Subquery</span><span class="o">.</span><span class="n">template</span><span class="p">:</span>
+            <span class="n">resolved</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">contains_subquery</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># Subquery is an unnecessary shim for a resolved query as it</span>
+            <span class="c1"># complexifies the lookup&#39;s right-hand-side introspection.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_field</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">resolved</span><span class="o">.</span><span class="n">query</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_field</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_field</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span>
+                <span class="n">resolved</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">output_field</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="n">ExpressionWrapper</span><span class="p">(</span><span class="n">resolved</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">output_field</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_field</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">resolved</span><span class="o">.</span><span class="n">query</span>
+        <span class="k">return</span> <span class="n">resolved</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">clone</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -2031,16 +2078,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">partition_by</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partition_by</span><span class="p">,)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">partition_by</span> <span class="o">=</span> <span class="n">ExpressionList</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">partition_by</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="o">=</span> <span class="n">OrderByList</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">,</span> <span class="p">(</span><span class="n">BaseExpression</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="o">=</span> <span class="n">OrderByList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Window.order_by must be either a string reference to a &quot;</span>
-                    <span class="s2">&quot;field, an expression, or a list or tuple of them.&quot;</span>
-                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span> <span class="o">=</span> <span class="n">OrderByList</span><span class="o">.</span><span class="n">from_param</span><span class="p">(</span><span class="s2">&quot;Window.order_by&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_by</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">output_field</span><span class="o">=</span><span class="n">output_field</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_expression</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_expressions</span><span class="p">(</span><span class="n">expression</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 

@@ -370,6 +370,12 @@ Returns two lists of accounts and objects.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.comms.models.Msg.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.comms.models.Msg.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="evennia.comms.models.Msg.get_next_by_db_date_created">
 <span class="sig-name descname"><span class="pre">get_next_by_db_date_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">db_date_created&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evennia.comms.models.Msg.get_next_by_db_date_created" title="Link to this definition">¶</a></dt>
@@ -562,6 +568,12 @@ class built by <strong>**create_forward_many_to_many_manager()**</strong> define
 <dt class="sig sig-object py" id="evennia.comms.models.ChannelDB.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.comms.models.ChannelDB.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.comms.models.ChannelDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.comms.models.ChannelDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1200,6 +1212,12 @@ default search functions of Evennia to allow quick searches by alias.</p>
 <dt class="sig sig-object py" id="evennia.comms.models.Tag.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.comms.models.Tag.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.comms.models.Tag.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.comms.models.Tag.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2347,6 +2365,7 @@ this functionality is pretty much exclusively used by handlers.</p>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.access"><code class="docutils literal notranslate"><span class="pre">Msg.access()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Msg.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Msg.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.comms.models.Msg.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Msg.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.get_next_by_db_date_created"><code class="docutils literal notranslate"><span class="pre">Msg.get_next_by_db_date_created()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.get_previous_by_db_date_created"><code class="docutils literal notranslate"><span class="pre">Msg.get_previous_by_db_date_created()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Msg.header"><code class="docutils literal notranslate"><span class="pre">Msg.header</span></code></a></li>
@@ -2373,6 +2392,7 @@ this functionality is pretty much exclusively used by handlers.</p>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.objects"><code class="docutils literal notranslate"><span class="pre">ChannelDB.objects</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ChannelDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ChannelDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.comms.models.ChannelDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ChannelDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.db_attributes"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_attributes</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.db_date_created"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_date_created</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.ChannelDB.db_key"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_key</span></code></a></li>
@@ -2437,6 +2457,7 @@ this functionality is pretty much exclusively used by handlers.</p>
 <li><a class="reference internal" href="#evennia.comms.models.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.comms.models.Tag.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Tag.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Tag.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Tag.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.comms.models.Tag.NotUpdated"><code class="docutils literal notranslate"><span class="pre">Tag.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Tag.accountdb_set"><code class="docutils literal notranslate"><span class="pre">Tag.accountdb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Tag.channeldb_set"><code class="docutils literal notranslate"><span class="pre">Tag.channeldb_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.comms.models.Tag.db_category"><code class="docutils literal notranslate"><span class="pre">Tag.db_category</span></code></a></li>

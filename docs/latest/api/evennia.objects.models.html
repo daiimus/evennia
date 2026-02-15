@@ -303,6 +303,12 @@ not.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.objects.models.ObjectDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.objects.models.ObjectDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="evennia.objects.models.ObjectDB.account">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">account</span></span><a class="headerlink" href="#evennia.objects.models.ObjectDB.account" title="Link to this definition">¶</a></dt>
@@ -407,7 +413,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -454,7 +460,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -476,7 +482,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -528,7 +534,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -609,6 +615,7 @@ class built by <strong>**create_forward_many_to_many_manager()**</strong> define
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.at_db_location_postsave"><code class="docutils literal notranslate"><span class="pre">ObjectDB.at_db_location_postsave()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ObjectDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ObjectDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.objects.models.ObjectDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ObjectDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.account"><code class="docutils literal notranslate"><span class="pre">ObjectDB.account</span></code></a></li>
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.db_account_id"><code class="docutils literal notranslate"><span class="pre">ObjectDB.db_account_id</span></code></a></li>
 <li><a class="reference internal" href="#evennia.objects.models.ObjectDB.db_attributes"><code class="docutils literal notranslate"><span class="pre">ObjectDB.db_attributes</span></code></a></li>

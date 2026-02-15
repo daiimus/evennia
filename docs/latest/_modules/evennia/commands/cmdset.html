@@ -595,17 +595,19 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cmd</span><span class="o">.</span><span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">cmd</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmdsetobj</span>
 
-            <span class="c1"># remove duplicates and add new</span>
-            <span class="k">for</span> <span class="n">_dum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">commands</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">cmd</span><span class="p">)):</span>
-                <span class="n">commands</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_duplicates</span><span class="p">:</span>
+                <span class="c1"># remove duplicates and add new</span>
+                <span class="k">for</span> <span class="n">_dum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">commands</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">cmd</span><span class="p">)):</span>
+                    <span class="n">commands</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
             <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
             <span class="c1"># add system_command to separate list as well,</span>
             <span class="c1"># for quick look-up. These have no</span>
             <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">):</span>
-                <span class="c1"># remove same-matches and add new</span>
-                <span class="k">for</span> <span class="n">_dum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">system_commands</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">cmd</span><span class="p">)):</span>
-                    <span class="n">system_commands</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_duplicates</span><span class="p">:</span>
+                    <span class="c1"># remove same-matches and add new</span>
+                    <span class="k">for</span> <span class="n">_dum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">system_commands</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">cmd</span><span class="p">)):</span>
+                        <span class="n">system_commands</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
                 <span class="n">system_commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_duplicates</span><span class="p">:</span>

@@ -1256,6 +1256,12 @@ overriding the call (unused by default).</p></li>
 <dd><p>Bases: <a class="reference internal" href="evennia.accounts.models.html#evennia.accounts.models.AccountDB.MultipleObjectsReturned" title="evennia.accounts.models.AccountDB.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.DefaultAccount.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.DefaultAccount.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="evennia.accounts.models.html#evennia.accounts.models.AccountDB.NotUpdated" title="evennia.accounts.models.AccountDB.NotUpdated"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotUpdated</span></code></a></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.accounts.accounts.DefaultAccount.path">
 <span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'evennia.accounts.accounts.DefaultAccount'</span></em><a class="headerlink" href="#evennia.accounts.accounts.DefaultAccount.path" title="Link to this definition">¶</a></dt>
@@ -1345,6 +1351,12 @@ overriding the call (unused by default).</p>
 <dd><p>Bases: <a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.MultipleObjectsReturned" title="evennia.accounts.accounts.DefaultAccount.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.DefaultGuest.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.DefaultGuest.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.NotUpdated" title="evennia.accounts.accounts.DefaultAccount.NotUpdated"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotUpdated</span></code></a></p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evennia.accounts.accounts.DefaultGuest.path">
 <span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'evennia.accounts.accounts.DefaultGuest'</span></em><a class="headerlink" href="#evennia.accounts.accounts.DefaultGuest.path" title="Link to this definition">¶</a></dt>
@@ -1400,6 +1412,12 @@ our liking.</p>
 <dt class="sig sig-object py" id="evennia.accounts.accounts.AccountDB.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.accounts.accounts.AccountDB.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.AccountDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.AccountDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1649,7 +1667,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1669,7 +1687,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1717,7 +1735,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1862,6 +1880,12 @@ beyond the ones inherited from TypedObject:</p>
 <dt class="sig sig-object py" id="evennia.accounts.accounts.ChannelDB.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.accounts.accounts.ChannelDB.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.ChannelDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.ChannelDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2627,6 +2651,12 @@ type class with new database-stored variables.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.ObjectDB.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.ObjectDB.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="evennia.accounts.accounts.ObjectDB.account">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">account</span></span><a class="headerlink" href="#evennia.accounts.accounts.ObjectDB.account" title="Link to this definition">¶</a></dt>
@@ -2823,7 +2853,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2870,7 +2900,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2898,7 +2928,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2955,7 +2985,7 @@ many-to-one relation.</p>
 </div>
 <p><strong>**Parent.children**</strong> is a <strong>**ReverseManyToOneDescriptor**</strong> instance.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
-class built by <strong>**create_forward_many_to_many_manager()**</strong> defined below.</p>
+class built by <strong>**create_reverse_many_to_one_manager()**</strong> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3240,6 +3270,12 @@ If no key is given, delete <em>all</em> scripts on the object!</p>
 <dt class="sig sig-object py" id="evennia.accounts.accounts.ServerConfig.MultipleObjectsReturned">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#evennia.accounts.accounts.ServerConfig.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="evennia.accounts.accounts.ServerConfig.NotUpdated">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#evennia.accounts.accounts.ServerConfig.NotUpdated" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3541,8 +3577,8 @@ evennia repo itself.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="evennia.accounts.accounts.import_string">
 <span class="sig-prename descclassname"><span class="pre">evennia.accounts.accounts.</span></span><span class="sig-name descname"><span class="pre">import_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dotted_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/django/utils/module_loading.html#import_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evennia.accounts.accounts.import_string" title="Link to this definition">¶</a></dt>
-<dd><p>Import a dotted module path and return the attribute/class designated by the
-last name in the path. Raise ImportError if the import failed.</p>
+<dd><p>Import a dotted module path and return the attribute/class designated by
+the last name in the path. Raise ImportError if the import failed.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3754,6 +3790,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.at_look"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.at_look()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.NotUpdated"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.path"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.path</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultAccount.typename"><code class="docutils literal notranslate"><span class="pre">DefaultAccount.typename</span></code></a></li>
 </ul>
@@ -3766,6 +3803,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.at_post_disconnect"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.at_post_disconnect()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.NotUpdated"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.path"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.path</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.DefaultGuest.typename"><code class="docutils literal notranslate"><span class="pre">DefaultGuest.typename</span></code></a></li>
 </ul>
@@ -3773,6 +3811,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB"><code class="docutils literal notranslate"><span class="pre">AccountDB</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">AccountDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">AccountDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">AccountDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.account_subscription_set"><code class="docutils literal notranslate"><span class="pre">AccountDB.account_subscription_set</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.cmdset_storage"><code class="docutils literal notranslate"><span class="pre">AccountDB.cmdset_storage</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.AccountDB.date_joined"><code class="docutils literal notranslate"><span class="pre">AccountDB.date_joined</span></code></a></li>
@@ -3828,6 +3867,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB"><code class="docutils literal notranslate"><span class="pre">ChannelDB</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ChannelDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ChannelDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ChannelDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.db_account_subscriptions"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_account_subscriptions</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.db_attributes"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_attributes</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ChannelDB.db_date_created"><code class="docutils literal notranslate"><span class="pre">ChannelDB.db_date_created</span></code></a></li>
@@ -3895,6 +3935,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB"><code class="docutils literal notranslate"><span class="pre">ObjectDB</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ObjectDB.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ObjectDB.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ObjectDB.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.account"><code class="docutils literal notranslate"><span class="pre">ObjectDB.account</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.at_db_location_postsave"><code class="docutils literal notranslate"><span class="pre">ObjectDB.at_db_location_postsave()</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ObjectDB.cmdset_storage"><code class="docutils literal notranslate"><span class="pre">ObjectDB.cmdset_storage</span></code></a></li>
@@ -3957,6 +3998,7 @@ are replaced by the <strong>default</strong> argument.</p>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig"><code class="docutils literal notranslate"><span class="pre">ServerConfig</span></code></a><ul>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">ServerConfig.DoesNotExist</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">ServerConfig.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.NotUpdated"><code class="docutils literal notranslate"><span class="pre">ServerConfig.NotUpdated</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.db_key"><code class="docutils literal notranslate"><span class="pre">ServerConfig.db_key</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.db_value"><code class="docutils literal notranslate"><span class="pre">ServerConfig.db_value</span></code></a></li>
 <li><a class="reference internal" href="#evennia.accounts.accounts.ServerConfig.id"><code class="docutils literal notranslate"><span class="pre">ServerConfig.id</span></code></a></li>

@@ -139,6 +139,16 @@
     <span class="c1"># simple string matches, thus the character streams must be the same</span>
     <span class="c1"># for the lookups to work properly. See tests.py for more information.</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_ObjectWrapper</span><span class="p">):</span>
+            <span class="c1"># Keep conflict wrappers for regular values, but still normalize wrapped</span>
+            <span class="c1"># db objects to the same packed representation as Attribute storage.</span>
+            <span class="n">packed</span> <span class="o">=</span> <span class="n">pack_dbobj</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">_obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">packed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">_obj</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">packed</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Make sure database objects are normalized before pickling for lookups.</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">pack_dbobj</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
         <span class="n">value</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">CopyError</span><span class="p">:</span>
         <span class="c1"># this can happen on a manager query where the search query string is a</span>
